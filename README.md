@@ -8,7 +8,7 @@ Mobilní lístek pro QR kód: Nápojový lístek, Koktejly, Delikatesy, Vinný l
 - `src/assets/` – grafika vyříznutá z tiskových lístků
 - `src/photos/` – zdrojové fotky kategorií (Delikatesy). Název souboru = kategorie:
   `syry`, `croissanty`, `pinsa`, `prkenka`, `tapas`, `speciality` (.jpg / .png / .webp).
-  Build je ořízne na 4:5 a uloží do `photos/`. Kategorie bez fotky se zobrazí bez ní.
+  Build je zmenší na šířku 900 px (vyšší než 4:5 ořízne) a uloží do `photos/`. Kategorie bez fotky se zobrazí bez ní.
 
 Po úpravě spusť `python3 src/build.py` (potřebuje Pillow) a commitni `index.html` i `photos/`.
 
