@@ -189,6 +189,9 @@ section.sec + section.sec{margin-top:6px}
 .thanks h3::before,.thanks h3::after{content:"";width:56px;height:1.5px;background:var(--red)}
 .thanks p{margin:0;font-size:15px}
 
+/* category photos: fixed 4:5 box so lazy loading never shifts the scroll positions */
+.photo{margin:6px 0 30px}
+.photo img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;background:var(--bg-deep)}
 footer{text-align:center;padding:30px 20px calc(env(safe-area-inset-bottom) + 40px)}
 footer .hand{height:76px;width:auto;margin:22px auto 22px}
 footer .logo{height:52px;width:auto;margin:0 auto}
@@ -233,6 +236,7 @@ footer .fine{margin-top:20px;font-size:12.5px;color:var(--muted)}
 </div>
 <script>
 const IMG = __IMGS__;
+const PHOTOS = __PHOTOS__;  /* photos/<id>.webp that exist – sections without one show nothing */
 __DATA__
 
 const $ = (s, el=document) => el.querySelector(s);
@@ -319,7 +323,8 @@ const THEME = {pink:"#FBE4E3",mint:"#D9F2EE",peach:"#FDE9CF",cream:"#FCF6D2"};
 TABS.forEach(t => {
   tabsEl.insertAdjacentHTML("beforeend", `<button class="tab" role="tab" id="tab-${t.id}" aria-controls="p-${t.id}" data-tab="${t.id}">${esc(t.label)}</button>`);
   let h = `<div class="cover">${t.cover.quote?`<p class="quote">${esc(t.cover.quote)}</p>`:""}<h1 class="pre">${esc(t.cover.pre)}</h1><img src="${IMG[t.cover.img]}" alt=""></div>`;
-  h += t.sections.map(s => `<section class="sec" id="${t.id}-${s.id}" data-nav="${esc(s.nav)}">${s.blocks.map(b => R[b.k](b)).join("")}</section>`).join("");
+  const photo = s => s.photo && PHOTOS.includes(s.photo) ? `<figure class="photo"><img src="photos/${s.photo}.webp" width="900" height="1125" loading="lazy" decoding="async" alt="${esc(s.photoAlt||s.nav)}"></figure>` : "";
+  h += t.sections.map(s => `<section class="sec" id="${t.id}-${s.id}" data-nav="${esc(s.nav)}">${s.blocks.map(b => R[b.k](b)).join("")}${photo(s)}</section>`).join("");
   main.insertAdjacentHTML("beforeend", `<div class="panel" role="tabpanel" id="p-${t.id}" aria-labelledby="tab-${t.id}" hidden>${h}</div>`);
 });
 

@@ -181,14 +181,14 @@ const TABS = [
   id: "delikatesy", label: "Delikatesy", theme: "peach",
   cover: { pre: "DELIKATESY", img: "tapas" },
   sections: [
-    { id: "syry", nav: "Sýry", blocks: [
+    { id: "syry", photo: "syry", photoAlt: "Sýrové prkénko", nav: "Sýry", blocks: [
       { k: "head", deco: "SÝRY", color: "red", line: true },
       { k: "dish", items: [
         { n: "Základní sýrové prkénko", d: "výběr sýrů dle denní nabídky", rows: [["pro jednoho","129 Kč"],["pro dva","235 Kč"]] },
         { n: "Výběrové sýry dle denní nabídky", rows: [["100 g","159 Kč"]] },
         { n: "Mix výběrových sýrů", d: "výběr sýrů, croissantové chipsy, rozmarýn, čerstvě mletý pepř, extra panenský olivový olej", rows: [["","199 Kč"]] } ] }
     ]},
-    { id: "croissanty", nav: "Slané croissanty", blocks: [
+    { id: "croissanty", photo: "croissanty", photoAlt: "Slané croissanty", nav: "Slané croissanty", blocks: [
       { k: "head", spaced: "SLANÉ CROISSANTY", line: true },
       { k: "list", unit: "Kč", rich: true, items: [
         ["Prosciutto & mozzarella","prosciutto cotto, mozzarella, rukola, olivový olej",109],
@@ -202,25 +202,25 @@ const TABS = [
         { k: "center", items: [["Sestavte si svůj croissant podle chuti!","","119 Kč"]] }
       ]}
     ]},
-    { id: "pinsa", nav: "Pinsa", blocks: [
+    { id: "pinsa", photo: "pinsa", photoAlt: "Pinsa", nav: "Pinsa", blocks: [
       { k: "head", img: "pinsa", alt: "pinsa" },
       { k: "list", label: "základ zapečený s mozzarelou", unit: "Kč", rich: true, items: [
         ["Šunková","",350],["Mortadella","",350],["Prosciutto crudo","rukola",350],["Salámový mix","výběr italských salámů",350],
         ["Picante","pikantní salám a olivy",350],["Sýrový mix","výběr sýrů",350],["Sýrová s olivami","výběr sýrů, zelené a černé olivy",350] ] }
     ]},
-    { id: "prkenka", nav: "Prkénka", blocks: [
+    { id: "prkenka", photo: "prkenka", photoAlt: "Obložené prkénko", nav: "Prkénka", blocks: [
       { k: "box", title: "OBLOŽENÁ PRKÉNKA", titleColor: "orange", spaced: true, blocks: [
         { k: "note", text: "Prosciutto Cotto, Prosciutto Crudo, Mortadella, italské a španělské salámy, výběrové sýry, olivy, croissantové chipsy" },
         { k: "center", red: true, items: [["Malé — pro jednoho","","199 Kč"],["Velké — pro dva","","379 Kč"]] }
       ]}
     ]},
-    { id: "tapas", nav: "Tapas & olivy", blocks: [
+    { id: "tapas", photo: "tapas", photoAlt: "Tapas a olivy", nav: "Tapas & olivy", blocks: [
       { k: "head", spaced: "TAPAS", line: true, sub: "dle aktuální nabídky" },
       { k: "note", text: "Rádi Vám doporučíme naše aktuální speciality." },
       { k: "head", img: "olivy", alt: "olivy" },
       { k: "list", items: [["miska oliv","černé / zelené / mix","49 Kč"],["jako příloha k pinse","","35 Kč"]], rich: true }
     ]},
-    { id: "speciality", nav: "Speciality", blocks: [
+    { id: "speciality", photo: "speciality", photoAlt: "Hovězí carpaccio a tatarský biftek", nav: "Speciality", blocks: [
       { k: "head", serif: "SPECIALITY", color: "red", big: true, sub: "dle aktuální nabídky" },
       { k: "dish", spacedNames: true, items: [
         { n: "Hovězí carpaccio Black Angus", d: "rukola, parmigiano reggiano, kapary, extra panenský olivový olej, čerstvě mletý pepř", rows: [["100 g","299 Kč"]] },

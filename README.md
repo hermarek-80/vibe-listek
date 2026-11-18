@@ -6,7 +6,10 @@ Mobilní lístek pro QR kód: Nápojový lístek, Koktejly, Delikatesy, Vinný l
 - `src/data.js` – obsah lístků (položky, ceny) – **tady se dělají úpravy**
 - `src/template.html` – vzhled a logika
 - `src/assets/` – grafika vyříznutá z tiskových lístků
+- `src/photos/` – zdrojové fotky kategorií (Delikatesy). Název souboru = kategorie:
+  `syry`, `croissanty`, `pinsa`, `prkenka`, `tapas`, `speciality` (.jpg / .png / .webp).
+  Build je ořízne na 4:5 a uloží do `photos/`. Kategorie bez fotky se zobrazí bez ní.
 
-Po úpravě `data.js` nebo `template.html` spusť `python3 src/build.py` a commitni nový `index.html`.
+Po úpravě spusť `python3 src/build.py` (potřebuje Pillow) a commitni `index.html` i `photos/`.
 
 Přímé odkazy na lístky: `#napoje`, `#koktejly`, `#delikatesy`, `#vina`.
