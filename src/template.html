@@ -41,7 +41,7 @@ button{font:inherit;color:inherit}
 .tabs::-webkit-scrollbar,.chips::-webkit-scrollbar{display:none}
 .tab{flex:1 0 auto;border:0;background:none;padding:10px 6px 11px;font:500 14px/1 var(--body);letter-spacing:.01em;white-space:nowrap;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--red)}
-.chips{display:flex;gap:6px;max-width:520px;margin:0 auto;padding:10px 16px 10px;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth}
+.chips{display:flex;gap:6px;max-width:520px;margin:0 auto;padding:10px 16px 10px;overflow-x:auto;scrollbar-width:none}
 .chip{flex:0 0 auto;border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);background:transparent;border-radius:999px;padding:7px 13px;font:500 13px/1 var(--body);cursor:pointer;white-space:nowrap}
 .chip.on{background:var(--dark);border-color:var(--dark);color:var(--bg)}
 .nav::after{content:"";display:block;height:4px;max-width:520px;margin:0 auto;background:radial-gradient(circle,var(--red) .9px,transparent 1.3px) 0 0/5px 4px repeat-x;opacity:.55}
@@ -339,10 +339,15 @@ function show(id, opts={}){
   if (!opts.keepScroll) window.scrollTo({top:0});
   spy();
 }
+let lockUntil = 0;
 function setChip(secId){
   chipsEl.querySelectorAll(".chip").forEach(c => {
     const on = c.dataset.sec === secId;
-    if (on && !c.classList.contains("on")) c.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"});
+    if (on && !c.classList.contains("on")) {
+      /* scroll only the chip strip – scrollIntoView would also move the page and cancel the section scroll */
+      const pr = chipsEl.getBoundingClientRect(), cr = c.getBoundingClientRect();
+      chipsEl.scrollTo({left: chipsEl.scrollLeft + (cr.left - pr.left) - (pr.width - cr.width) / 2, behavior: "smooth"});
+    }
     c.classList.toggle("on", on);
   });
 }
@@ -351,6 +356,7 @@ function spy(){
   const secs = [...document.querySelectorAll(`#p-${current} section.sec`)];
   setChip(secs[0]?.id);
   observer = new IntersectionObserver(es => {
+    if (Date.now() < lockUntil) return;
     const vis = secs.filter(s => { const r = s.getBoundingClientRect(); return r.top < innerHeight*0.45 && r.bottom > 140; });
     if (vis.length) setChip(vis[vis.length-1].id);
   }, {rootMargin:"-130px 0px -50% 0px", threshold:[0,0.01,0.5,1]});
@@ -360,7 +366,13 @@ function navOffset(){ return document.querySelector(".nav").offsetHeight + 8; }
 function scrollToEl(el){ const y = el.getBoundingClientRect().top + scrollY - navOffset(); window.scrollTo({top:y, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); }
 
 tabsEl.addEventListener("click", e => { const b = e.target.closest(".tab"); if (b) show(b.dataset.tab); });
-chipsEl.addEventListener("click", e => { const c = e.target.closest(".chip"); if (!c) return; setChip(c.dataset.sec); scrollToEl(document.getElementById(c.dataset.sec)); });
+chipsEl.addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if (!c) return;
+  lockUntil = Date.now() + 1000;   /* keep the tapped chip active while the page glides */
+  setChip(c.dataset.sec);
+  scrollToEl(document.getElementById(c.dataset.sec));
+});
+window.addEventListener("scrollend", () => { lockUntil = 0; });
 main.addEventListener("click", e => { const g = e.target.closest("[data-go]"); if (g) show(g.dataset.go); });
 window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (id && id !== current && TABS.some(t=>t.id===id)) show(id); });
 show(location.hash.slice(1) || "napoje");
