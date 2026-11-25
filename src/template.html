@@ -451,6 +451,11 @@ async function fixScripts(){
     const P = v => v/dpr;
     return { x0:P(x0)-OX, x1:P(x1)-OX, top:P(y0)-BY, bottom:P(y1)-BY, topCx:P(sx/n)-OX, data:d, cw:c.width, ch:c.height };
   };
+  /* does the loaded Neonoir itself contain this character? (identical pixels whatever the fallback)
+     Adobe Fonts serves a reduced character set unless the web project is set to "All characters" */
+  const hasCache = {};
+  const hasGlyph = ch => hasCache[ch] ??= (() => { const a = ink(ch, "neonoir, monospace"), b = ink(ch, "neonoir, serif");
+    return !!(a && b && a.x0===b.x0 && a.x1===b.x1 && a.top===b.top && a.bottom===b.bottom); })();
   /* the detached top part of a glyph (the i-dot): rows above the first empty row gap */
   const topPart = ch => {
     const f = ink(ch); if (!f) return null;
@@ -481,9 +486,9 @@ async function fixScripts(){
   };
   for (const h of heads) {
     const text = h.dataset.scr, color = getComputedStyle(h).color; h.dataset.done = "1";
-    if (![...text].some(ch => ACC[ch])) continue;
+    if (![...text].some(ch => ACC[ch] && (ch==="i" || !hasGlyph(ch)))) continue;
     const span = h.querySelector("span");
-    const conv = ch => { const a = ACC[ch]; if (!a) return esc(ch);
+    const conv = ch => { const a = ACC[ch]; if (!a || (ch!=="i" && hasGlyph(ch))) return esc(ch);   /* real glyph wins */
       return `<span class="acc" data-k="${a[1]}" data-b="${a[0]}" data-o="${ch}">${a[0]}<span class="bl"></span></span>`; };
     /* each word in a nowrap span so the measuring markers can't split it */
     span.innerHTML = text.split(" ").map(w => `<span class="w">${[...w].map(conv).join("")}</span>`).join(" ");
