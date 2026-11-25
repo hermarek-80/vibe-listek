@@ -238,6 +238,25 @@ const TABS = [
       ]},
       { k: "note", text: "Ceny lahví jsou uvedeny za láhev 0,75 l, není-li uvedeno jinak." }
     ]},
+    { id: "rozlevana", nav: "Rozlévaná", blocks: [
+      { k: "head", deco: "ROZLÉVANÁ VÍNA", line: true, sub2: ["dle aktuální nabídky","VINAŘSTVÍ STRACHOTÍN"] },
+      { k: "prices", cols: [["0,18 l","65 Kč"],["0,5 l","149 Kč"],["1 l","279 Kč"]] },
+      { k: "center", spacedNames: true, items: [["Vinný střik","suchý / polosuchý","0,3 l · 75 Kč"]] },
+      { k: "head", img: "bila", alt: "bílá vína" },
+      { k: "center", items: [["Irsai Oliver","Maďarsko · 11 % · polosladké"],["Grüner Veltliner","Rakousko · 12 % · suché"],["Pinot Gris","Maďarsko · 12 % · suché"],["Chardonnay","Maďarsko · 11,5 % · polosuché"],["Tramín červený","Maďarsko · 12 % · polosuché"]] },
+      { k: "head", img: "cervena", alt: "červená vína" },
+      { k: "center", items: [["Primitivo","Itálie · 13,5 % · suché"],["Merlot","Španělsko · 13 % · suché"],["Cabernet Sauvignon","Španělsko · 13 % · suché"]] }
+    ]},
+    { id: "cepovane", nav: "Čepované bubliny", blocks: [
+      { k: "box", title: "STRACCHETTO GLERA FRIZZANTE", deco: true, foot: "glasses", blocks: [
+        { k: "prices", cols: [["0,18 l","89 Kč"],["0,5 l","175 Kč"],["1 l","299 Kč"]], bare: true },
+        { k: "note", text: "ITALSKÉ ČEPOVANÉ BUBLINY", caps: true }
+      ]},
+      { k: "box", title: "NERO PROSECCO 0 %", deco: true, badge: "NEALKO", blocks: [
+        { k: "note", text: "NEALKO BUBLINY", caps: true },
+        { k: "list", items: [["0,15 l","","90 Kč"],["0,75 l","","400 Kč"]] }
+      ]}
+    ]},
     { id: "vyber-vibe", nav: "Výběr Vibe", blocks: [
       { k: "head", deco: "VÝBĚR VIBE", color: "red", sub: "10 vín s příběhem", line: true },
       { k: "wine", items: [
@@ -310,26 +329,7 @@ const TABS = [
       { k: "head", deco: "EVROPSKÝ VÝBĚR", color: "red", sub: "Francie | Itálie | Rakousko | Německo" },
       { k: "list", unit: "Kč", rich: true, items: [
         ["Chardonnay Luc Pirlet","Luc Pirlet · Languedoc, Francie",469],["Sauvignon Luc Pirlet","Luc Pirlet · Languedoc, Francie",469],["Toscana Bianco Sangiovese","Toskánsko, Itálie",469],["Michel Lynch Sauvignon Blanc","Michel Lynch · Bordeaux, Francie",649],["Grüner Veltliner Weingut Kellner","Weingut Kellner · Weinviertel, Rakousko",519],["Riesling trocken Mineralgestein Weingut Manz","Weingut Manz · Rheinhessen, Německo",698],["Pinot Grigio Antichello Santa Sofia","Santa Sofia · Veneto, Itálie",471],
-        ["Rivaner Weingut Gentsch","Weingut Gentsch · Mosel, Německo",626],["Petit Chablis Domaine Fourrey","Domaine Fourrey · Burgundsko, Francie","1 107"],["Primitivo Rosé Paolo Leo","Paolo Leo · Apulie, Itálie",469],["Syrah Rosé Luc Pirlet","Luc Pirlet · Languedoc, Francie",469],["Toscana Sangiovese Duca di Saragnano","Duca di Saragnano · Toskánsko, Itálie",469],["Pinot Noir Reserve Luc Pirlet","Luc Pirlet · Languedoc, Francie",649] ] }
-    ]},
-    { id: "rozlevana", nav: "Rozlévaná", blocks: [
-      { k: "head", deco: "ROZLÉVANÁ VÍNA", line: true, sub2: ["dle aktuální nabídky","VINAŘSTVÍ STRACHOTÍN"] },
-      { k: "prices", cols: [["0,18 l","65 Kč"],["0,5 l","149 Kč"],["1 l","279 Kč"]] },
-      { k: "center", spacedNames: true, items: [["Vinný střik","suchý / polosuchý","0,3 l · 75 Kč"]] },
-      { k: "head", img: "bila", alt: "bílá vína" },
-      { k: "center", items: [["Irsai Oliver","Maďarsko · 11 % · polosladké"],["Grüner Veltliner","Rakousko · 12 % · suché"],["Pinot Gris","Maďarsko · 12 % · suché"],["Chardonnay","Maďarsko · 11,5 % · polosuché"],["Tramín červený","Maďarsko · 12 % · polosuché"]] },
-      { k: "head", img: "cervena", alt: "červená vína" },
-      { k: "center", items: [["Primitivo","Itálie · 13,5 % · suché"],["Merlot","Španělsko · 13 % · suché"],["Cabernet Sauvignon","Španělsko · 13 % · suché"]] }
-    ]},
-    { id: "cepovane", nav: "Čepované bubliny", blocks: [
-      { k: "box", title: "STRACCHETTO GLERA FRIZZANTE", deco: true, foot: "glasses", blocks: [
-        { k: "prices", cols: [["0,18 l","89 Kč"],["0,5 l","175 Kč"],["1 l","299 Kč"]], bare: true },
-        { k: "note", text: "ITALSKÉ ČEPOVANÉ BUBLINY", caps: true }
-      ]},
-      { k: "box", title: "NERO PROSECCO 0 %", deco: true, badge: "NEALKO", blocks: [
-        { k: "note", text: "NEALKO BUBLINY", caps: true },
-        { k: "list", items: [["0,15 l","","90 Kč"],["0,75 l","","400 Kč"]] }
-      ]},
+        ["Rivaner Weingut Gentsch","Weingut Gentsch · Mosel, Německo",626],["Petit Chablis Domaine Fourrey","Domaine Fourrey · Burgundsko, Francie","1 107"],["Primitivo Rosé Paolo Leo","Paolo Leo · Apulie, Itálie",469],["Syrah Rosé Luc Pirlet","Luc Pirlet · Languedoc, Francie",469],["Toscana Sangiovese Duca di Saragnano","Duca di Saragnano · Toskánsko, Itálie",469],["Pinot Noir Reserve Luc Pirlet","Luc Pirlet · Languedoc, Francie",649] ] },
       { k: "thanks", title: "DĚKUJEME,", text: "že podporujete kvalitní vína & atmosféru našeho klubu." }
     ]}
   ]
