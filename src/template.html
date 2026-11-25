@@ -67,6 +67,11 @@ section.sec + section.sec{margin-top:6px}
 .deco.rules::before,.deco.rules::after{content:"";display:inline-block;width:.75em;height:.2em;border-top:2px solid currentColor;border-bottom:2px solid currentColor;vertical-align:.3em;margin:0 .22em}
 /* Neonoir script headings – sized to match the script headings cut from the print files */
 .scr{display:inline-block;position:relative;font:200 52px/1 var(--script);color:var(--red);padding:0 12px 14px;margin:0 auto}
+.hd .scr{font-weight:200}
+.scr .w{white-space:nowrap}
+.scr .acc{position:relative}
+.scr .mk{position:absolute;pointer-events:none}
+.scr .bl{display:inline-block;width:0;height:0;vertical-align:baseline}
 .scr.c-orange{color:var(--orange)} .scr.c-ink{color:var(--ink)}
 .scr::after{content:"";position:absolute;left:2px;right:2px;bottom:0;height:12px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 5 170 2 297 4' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 5 170 2 297 4' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat}
 .serif{font:400 40px/1 var(--serif);letter-spacing:-.005em}
@@ -266,7 +271,7 @@ const R = {
     const col = b.color ? ` c-${b.color}` : "";
     let h = "";
     if (b.img) h += `<h2><img class="script" src="${IMG[b.img]}" alt="${esc(b.alt)}"></h2>`;
-    if (b.script) h += `<h2 class="scr${col}">${esc(b.script)}</h2>`;
+    if (b.script) h += `<h2 class="scr${col}" aria-label="${esc(b.script)}" data-scr="${esc(b.script)}"><span aria-hidden="true">${esc(b.script)}</span></h2>`;
     if (b.deco) h += `<h2 class="deco${col}${b.dots||b.small?"":" rules"}">${b.dots?'<span class="orn"></span>':''}${esc(b.deco)}${b.dots?'<span class="orn"></span>':''}</h2>`;
     if (b.serif) h += `<h2 class="serif${col}">${esc(b.serif)}</h2>`;
     if (b.spaced) h += `<h2 class="spaced${col}">${esc(b.spaced)}</h2>`;
@@ -353,6 +358,7 @@ function show(id, opts={}){
   });
   chipsEl.innerHTML = t.sections.map(s => `<button class="chip" type="button" data-sec="${t.id}-${s.id}">${esc(s.nav)}</button>`).join("");
   if (location.hash.slice(1) !== t.id) history.replaceState(null, "", "#"+t.id);
+  requestAnimationFrame(() => fixScripts());
   if (!opts.keepScroll) { window.scrollTo({top:0}); requestAnimationFrame(() => window.scrollTo({top:0})); }  /* again after layout: scroll anchoring can nudge it */
   spy();
 }
@@ -413,6 +419,85 @@ document.querySelectorAll(".tohome").forEach(b => b.addEventListener("click", ()
 main.addEventListener("click", e => { const g = e.target.closest("[data-go]"); if (g) show(g.dataset.go); });
 window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (id && id !== current && TABS.some(t=>t.id===id)) show(id); });
 show(location.hash.slice(1) || "napoje");
+
+/* Neonoir has no Czech carons and its i-dot reads like an acute (“víbe”).
+   Rebuild those letters from the font's own shapes: the háček is cut out of “š” (š minus s),
+   the ring out of “å”, and the i gets a round dot taken from “.”. Measured on a canvas in the
+   visitor's browser, so placement follows the real glyphs; if the font isn't loaded, nothing changes. */
+const ACC = { "ě":["e","caron"], "č":["c","caron"], "ř":["r","caron"], "ň":["n","caron"], "ů":["u","ring"], "i":["ı","dot"] };
+async function fixScripts(){
+  const heads = [...document.querySelectorAll(".panel:not([hidden]) .scr[data-scr]:not([data-done])")];
+  if (!heads.length || !document.fonts) return;
+  const cs0 = getComputedStyle(heads[0]);
+  const font = `${cs0.fontStyle} ${cs0.fontWeight} ${cs0.fontSize} neonoir`;
+  try { await document.fonts.ready; await document.fonts.load(font, "šsåaı.ievbrnuc"); } catch(e) { return; }
+  /* fonts.check() is also true when no such face exists at all – require a really loaded Neonoir face */
+  if (![...document.fonts].some(f => f.family.replace(/["']/g,"").toLowerCase() === "neonoir" && f.status === "loaded")) {
+    heads.forEach(h => delete h.dataset.done); return;
+  }
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  const FS = parseFloat(cs0.fontSize);
+  const W = Math.ceil(FS*4), H = Math.ceil(FS*3), OX = FS, BY = FS*2;
+  const mkCanvas = () => { const c = document.createElement("canvas"); c.width = W*dpr; c.height = H*dpr; const x = c.getContext("2d", {willReadFrequently:true}); x.scale(dpr,dpr); x.font = font; x.textBaseline = "alphabetic"; return [c,x]; };
+  const ink = (s, fam) => {                      /* ink bbox of a string, coords relative to pen origin / baseline */
+    const [c,x] = mkCanvas(); if (fam) x.font = `${cs0.fontStyle} ${cs0.fontWeight} ${cs0.fontSize} ${fam}`;
+    x.fillText(s, OX, BY); const d = x.getImageData(0,0,c.width,c.height).data;
+    let x0=1e9,y0=1e9,x1=-1,y1=-1; const rows=[];
+    for (let y=0;y<c.height;y++) for (let xx=0;xx<c.width;xx++) if (d[(y*c.width+xx)*4+3]>60){ if(xx<x0)x0=xx; if(xx>x1)x1=xx; if(y<y0)y0=y; if(y>y1)y1=y; }
+    if (x1<0) return null;
+    const top = y0, band = Math.max(2, Math.round((y1-y0)*0.15)); let sx=0,n=0;
+    for (let y=top;y<=top+band;y++) for (let xx=x0;xx<=x1;xx++) if (d[(y*c.width+xx)*4+3]>60){ sx+=xx; n++; }
+    const P = v => v/dpr;
+    return { x0:P(x0)-OX, x1:P(x1)-OX, top:P(y0)-BY, bottom:P(y1)-BY, topCx:P(sx/n)-OX, data:d, cw:c.width, ch:c.height };
+  };
+  /* does the font itself have dotless ı? (same pixels whatever the fallback) */
+  const hasGlyph = ch => { const a = ink(ch, "neonoir, monospace"), b = ink(ch, "neonoir, serif"); return a && b && a.x0===b.x0 && a.x1===b.x1 && a.top===b.top; };
+  /* cut a mark: pixels of `full` lying above the top of `base` (or the whole glyph for "dot") */
+  const cutMark = (full, base, color) => {
+    const f = ink(full); if (!f) return null;
+    const cutY = base ? (BY + base.top) * dpr - 1 : Infinity;
+    let x0=1e9,y0=1e9,x1=-1,y1=-1;
+    for (let y=0;y<f.ch && y<cutY;y++) for (let x=0;x<f.cw;x++) if (f.data[(y*f.cw+x)*4+3]>20){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
+    if (x1<0) return null;
+    const c = document.createElement("canvas"); c.width = x1-x0+3; c.height = y1-y0+3; const x = c.getContext("2d");
+    const img = x.createImageData(c.width, c.height);
+    for (let y=y0;y<=y1;y++) for (let xx=x0;xx<=x1;xx++){ const a = f.data[(y*f.cw+xx)*4+3]; if(!a) continue; const i=((y-y0+1)*c.width+(xx-x0+1))*4; img.data[i+3]=a; }
+    x.putImageData(img,0,0); x.globalCompositeOperation="source-in"; x.fillStyle=color; x.fillRect(0,0,c.width,c.height);
+    return { canvas:c, w:c.width/dpr, h:c.height/dpr, cx:((x0+x1)/2)/dpr-OX, bottom:y1/dpr-BY, top:y0/dpr-BY };
+  };
+  const useDotless = hasGlyph("ı");
+  for (const h of heads) {
+    const text = h.dataset.scr, color = getComputedStyle(h).color; h.dataset.done = "1";
+    if (![...text].some(ch => ACC[ch] && (ch!=="i" || useDotless))) continue;
+    const span = h.querySelector("span");
+    const conv = ch => { const a = ACC[ch]; if (!a || (ch==="i" && !useDotless)) return esc(ch);
+      return `<span class="acc" data-k="${a[1]}" data-b="${a[0]}" data-o="${ch}">${a[0]}<span class="bl"></span></span>`; };
+    /* each word in a nowrap span so the measuring markers can't split it */
+    span.innerHTML = text.split(" ").map(w => `<span class="w">${[...w].map(conv).join("")}</span>`).join(" ");
+    const cache = {};
+    const mark = kind => cache[kind] ||= (kind==="caron" ? cutMark("š", ink("s"), color)
+                                       : kind==="ring" ? cutMark("å", ink("a"), color)
+                                       : cutMark(".", null, color));
+    const ref = { caron: () => ({ base: ink("s"), m: mark("caron") }), ring: () => ({ base: ink("a"), m: mark("ring") }) };
+    for (const s of span.querySelectorAll(".acc")) {
+      const kind = s.dataset.k, b = ink(s.dataset.b), m = mark(kind); if (!b || !m) continue;
+      let cx, bottom;
+      if (kind === "dot") {                       /* round dot where the font puts its own i-dot */
+        const di = cutMark("i", ink("ı"), color);
+        cx = b.topCx + (di ? di.cx - ink("ı").topCx : 0);
+        const cy = di ? (di.top + di.bottom)/2 : b.top - FS*0.22;
+        bottom = cy + m.h/2;
+      } else {                                    /* same offset/gap as the háček over š or ring over å */
+        const r = ref[kind](); cx = b.topCx + (m.cx - r.base.topCx); bottom = b.top - (r.base.top - m.bottom);
+      }
+      const sr = s.getBoundingClientRect(), base = s.querySelector(".bl").getBoundingClientRect().top - sr.top;
+      const c = m.canvas.cloneNode(); c.getContext("2d").drawImage(m.canvas,0,0); c.className = "mk";
+      c.style.width = m.w+"px"; c.style.height = m.h+"px";
+      c.style.left = (cx - m.w/2)+"px"; c.style.top = (base + bottom - m.h)+"px";
+      s.appendChild(c);
+    }
+  }
+}
 
 /* search */
 const search = $("#search"), q = $("#q"), sres = $("#sres");
