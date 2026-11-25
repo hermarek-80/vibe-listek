@@ -212,6 +212,9 @@ section.sec + section.sec{margin-top:6px}
 /* category photos: width/height attributes reserve the box, so lazy loading never shifts the scroll positions */
 .photo{margin:6px 0 30px}
 .photo img{width:100%;height:auto;background:var(--bg-deep)}
+.totop{display:block;margin:0 auto;border:0;background:none;padding:6px 16px;cursor:pointer;border-radius:12px}
+.totop:hover .hand{transform:translateY(-4px)}
+footer .hand{transition:transform .2s ease}
 .tohome{border:0;background:none;padding:4px;margin:0;cursor:pointer;border-radius:8px}
 footer{text-align:center;padding:30px 20px calc(env(safe-area-inset-bottom) + 40px)}
 footer .hand{height:76px;width:auto;margin:22px auto 22px}
@@ -247,7 +250,7 @@ footer .fine{margin-top:20px;font-size:12.5px;color:var(--muted)}
 <main class="wrap" id="main"></main>
 <footer>
   <a href="https://www.instagram.com/vibezlin/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".9" fill="currentColor"/></svg>@vibezlin</a>
-  <img class="hand" src="__IMG_hand_up__" alt="">
+  <button class="totop" type="button" aria-label="Nahoru na začátek lístku"><img class="hand" src="__IMG_hand_up__" alt=""></button>
   <button class="tohome" type="button" aria-label="Zpět na Nápojový lístek"><img class="logo" src="__IMG_logo__" alt="Vibe"></button>
   <div class="fine">Všechny ceny jsou v Kč.</div>
 </footer>
@@ -419,6 +422,12 @@ chipsEl.addEventListener("click", e => {
 });
 document.addEventListener("scrollend", e => { if (e.target === document) unlock(); });
 ["wheel","touchstart"].forEach(ev => window.addEventListener(ev, () => { lockTarget = null; lockUntil = 0; }, {passive:true}));
+/* pointing hand in the footer: back to the top of the current menu */
+document.querySelector(".totop").addEventListener("click", () => {
+  const first = document.querySelector(`#p-${current} section.sec`)?.id;
+  lockUntil = Date.now() + 1500; setChip(first);
+  window.scrollTo({top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+});
 /* logo = home: always back to the top of Nápojový lístek */
 document.querySelectorAll(".tohome").forEach(b => b.addEventListener("click", () => {
   if (current !== "napoje") { show("napoje"); return; }
