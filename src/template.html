@@ -183,6 +183,7 @@ section.sec + section.sec{margin-top:6px}
 .wi .nt{color:var(--red);font-size:13.5px;line-height:1.45;margin-top:10px;text-wrap:balance}
 .wine.compact .nt{color:var(--muted);font-size:14.5px}
 .wi .nt p{margin:0 0 6px}
+.wi .nt b{font-weight:600}
 .wi .p{margin-top:10px;font-weight:500;font-variant-numeric:tabular-nums}
 
 .thanks{text-align:center;margin:30px 0 10px}
@@ -315,7 +316,7 @@ const R = {
   prices(b){ return `<div class="prices${b.bare?" bare":""}">${b.cols.map(([v,p])=>`<div><small>${esc(v)}</small><b>${esc(p)}</b></div>`).join("")}</div>`; },
   wine(b){
     return `<div class="wine${b.compact?" compact":""}">` + b.items.map(([n,pr,rg,nt,p]) =>
-      `<div class="wi it" data-n="${esc(n)}" data-d="${esc([pr,rg].filter(Boolean).join(", "))}" data-p="${esc(p)}"><div class="n">${esc(n)}</div>${pr?`<div class="pr">${esc(pr)}</div>`:""}${rg?`<div class="rg">${b.compact?"— "+esc(rg)+" —":"• "+esc(rg)+" •"}</div>`:""}${nt.length?`<div class="nt">${nt.map(t=>`<p>${esc(t)}</p>`).join("")}</div>`:""}<div class="p">${esc(p)}</div></div>`).join("") + `</div>`;
+      `<div class="wi it" data-n="${esc(n)}" data-d="${esc([pr,rg].filter(Boolean).join(", "))}" data-p="${esc(p)}"><div class="n">${esc(n)}</div>${pr?`<div class="pr">${esc(pr)}</div>`:""}${rg?`<div class="rg">${b.compact?"— "+esc(rg)+" —":"• "+esc(rg)+" •"}</div>`:""}${nt.length?`<div class="nt">${nt.map(t=>`<p>${esc(t).replace(/^(Chuť|Výběr odrůd|Výběr):/,"<b>$1:</b>")}</p>`).join("")}</div>`:""}<div class="p">${esc(p)}</div></div>`).join("") + `</div>`;
   },
   thanks(b){ return `<div class="thanks"><h3>${esc(b.title)}</h3><p>${esc(b.text)}</p></div>`; }
 };

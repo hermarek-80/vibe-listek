@@ -183,6 +183,7 @@ section.sec + section.sec{margin-top:6px}
 .wi .nt{color:var(--red);font-size:13.5px;line-height:1.45;margin-top:10px;text-wrap:balance}
 .wine.compact .nt{color:var(--muted);font-size:14.5px}
 .wi .nt p{margin:0 0 6px}
+.wi .nt b{font-weight:600}
 .wi .p{margin-top:10px;font-weight:500;font-variant-numeric:tabular-nums}
 
 .thanks{text-align:center;margin:30px 0 10px}
@@ -476,89 +477,101 @@ const TABS = [
     { id: "o-vinech", nav: "Úvod", blocks: [
       { k: "box", img: "grapes", alt: "", tip: true, blocks: [
         { k: "center", items: [["Každý týden nabízíme vybraná rozmanitá vína na skleničku z vinařství z celého světa."],["Rádi doporučíme víno podle chuti, jídla i nálady."],["Nabídka se může měnit podle aktuální dostupnosti a ročníků."],["U vybraných lahví pomůžeme s dárkovým výběrem nebo láhví domů."]], plain: true }
-      ]}
-    ]},
-    { id: "rozlevana", nav: "Rozlévaná", blocks: [
-      { k: "head", deco: "ROZLÉVANÁ VÍNA", line: true, sub2: ["dle aktuální nabídky","VINAŘSTVÍ STRACHOTÍN"] },
-      { k: "prices", cols: [["0,18 l","65 Kč"],["0,5 l","149 Kč"],["1,0 l","279 Kč"]] },
-      { k: "center", spacedNames: true, items: [["Vinný střik","suchý / polosuchý","0,3 l · 75 Kč"]] },
-      { k: "head", img: "bila", alt: "bílá vína" },
-      { k: "center", items: [["Irsai Oliver","11 % | polosladké | Maďarsko"],["Grüner Veltliner","12 % | suché | Rakousko"],["Pinot Gris","12 % | suché | Maďarsko"],["Chardonnay","11,5 % | polosuché | Maďarsko"],["Tramín červený","12 % | polosuché | Maďarsko"]] },
-      { k: "head", img: "cervena", alt: "červená vína" },
-      { k: "center", items: [["Primitivo","13,5 % | suché | Itálie"],["Merlot","13 % | suché | Španělsko"],["Cabernet Sauvignon","13 % | suché | Španělsko"]] }
-    ]},
-    { id: "stracchetto", nav: "Čepované bubliny", blocks: [
-      { k: "box", title: "STRACCHETTO GLERA FRIZZANTE", deco: true, foot: "glasses", blocks: [
-        { k: "prices", cols: [["0,18 l","89 Kč"],["0,5 l","175 Kč"],["1,0 l","299 Kč"]], bare: true },
-        { k: "note", text: "ITALSKÉ ČEPOVANÉ BUBLINY", caps: true }
       ]},
-      { k: "box", title: "NERO PROSECCO", deco: true, badge: "NEALKO", blocks: [
-        { k: "note", text: "NEALKO BUBLINY · 0 %", caps: true },
-        { k: "list", items: [["0,15 l","","90 Kč"],["0,75 l","","400 Kč"]] }
-      ]}
+      { k: "note", text: "Ceny lahví jsou uvedeny za láhev 0,75 l, není-li uvedeno jinak." }
     ]},
-    { id: "bila-vina", nav: "Bílá vína", blocks: [
-      { k: "head", spaced: "BÍLÁ VÍNA", dotline: true },
+    { id: "vyber-vibe", nav: "Výběr Vibe", blocks: [
+      { k: "head", deco: "VÝBĚR VIBE", color: "red", sub: "10 vín s příběhem", line: true },
       { k: "wine", items: [
-        ["Chablis 1er Cru Côte de Lechet 2022", "Domaine Fourrey", "Burgundsko, Francie", ["Chardonnay s výraznou svěžestí a dlouhým závěrem.","Chuťově: minerální, citrusy, bílá broskev. Vhodné k rybám a mořským plodům."], "1 690 Kč"],
-        ["Pouilly-Fuissé 1er Cru", "André Goichot", "Burgundsko, Francie", ["Plné a komplexní Chardonnay s tóny zralého ovoce a jemným dotekem dubu.","Chuťově: plné, broskev, oříšky, máslo. Vhodné k drůbeži a krémovým jídlům."], "2 490 Kč"],
-        ["Châteauneuf-du-Pape Blanc 2023", "Domaine des Sénéchaux", "Rhône, Francie", ["Výrazně aromatické víno s krásnou strukturou a dlouhým závěrem.","Chuťově: aromatické, hruška, med, byliny. Vhodné k rybám, drůbeži a jemné kuchyni."], "2 590 Kč"],
-        ["Riesling Smaragd 2022", "Weingut Eder", "Wachau, Rakousko", ["Koncentrovaný a elegantní Riesling s tóny meruňky a výraznou mineralitou.","Vhodné k rybám a asijské kuchyni."], "1 390 Kč"],
-        ["Sangiovese Bianco Toscana", "Capanna", "Toskánsko, Itálie", ["Svěží a originální bílá varianta Sangiovese s tóny bílého ovoce a květin.","Vhodné k těstovinám, risottu a lehkým jídlům."], "1 290 Kč"] ] }
+        ["Chablis 1er Cru Côte de Lechet 2022", "Domaine Fourrey", "Burgundsko, Francie", ["Chardonnay s výraznou svěžestí a dlouhým závěrem.", "Chuť: citrusy / bílé ovoce / mineralita", "Vhodné k rybám a mořským plodům."], "1 690 Kč"],
+        ["Châteauneuf-du-Pape Blanc 2023", "Domaine des Sénéchaux", "Rhône, Francie", ["Výrazně aromatické víno s krásnou strukturou a dlouhým závěrem.", "Chuť: bílá broskev / bylinky / květy", "Vhodné k rybám, drůbeži a jemné kuchyni."], "2 590 Kč"],
+        ["Riesling Smaragd 2022", "Weingut Eder", "Wachau, Rakousko", ["Koncentrovaný a elegantní Riesling s výraznou mineralitou.", "Chuť: meruňka / citrus / minerální závěr", "Vhodné k rybám a asijské kuchyni."], "1 390 Kč"],
+        ["André Clouet Grande Réserve Grand Cru Brut", "André Clouet", "Champagne, Francie", ["Plné, elegantní Champagne ze 100 % Pinot Noir.", "Chuť: zralé jablko / brioška / citrus"], "2 290 Kč"],
+        ["Franck Bonville Unisson Grand Cru Blanc de Blancs", "Franck Bonville", "Champagne, Francie", ["Jemné, krémové Champagne ze 100 % Chardonnay.", "Chuť: citrusy / brioška / mandle"], "3 290 Kč"],
+        ["Alaya Tierra", "Bodegas Atalaya", "Almansa, Španělsko", ["Chuť: černé ovoce / síla / dlouhý závěr"], "1 200 Kč"],
+        ["Juan Gil Blue Label 2018", "Juan Gil", "Jumilla, Španělsko", ["Chuť: tmavé ovoce / koření / dub"], "3 700 Kč"],
+        ["Colle al Vento Quatro Venti Primitivo Rosato 2025", "Cantine Andreas Mazzei", "Salento, Itálie", ["Chuť: jahody / maliny / svěžest"], "590 Kč"],
+        ["Grans-Fassian Trittenheimer Apotheke GG 2019", "Grans-Fassian", "Mosel, Německo", ["Chuť: broskev / citrus / břidlice"], "2 490 Kč"],
+        ["Guido Manara Rosso Veneto IGP 2018", "Manara", "Veneto, Itálie", ["Chuť: švestka / třešeň / kakao / koření"], "2 290 Kč"] ] }
     ]},
-    { id: "cervene-vino", nav: "Červené víno", blocks: [
-      { k: "head", spaced: "ČERVENÉ VÍNO", dotline: true },
+    { id: "velka-bila", nav: "Velká bílá", blocks: [
+      { k: "head", img: "bila", alt: "bílá vína", sub: "velká bílá vína" },
       { k: "wine", items: [
-        ["Perricone Talia BIO", "Tenute Mokarta", "Sicílie, Itálie", ["Plné a sametové červené víno s tóny tmavého ovoce a koření. BIO produkce.","Chuťově: plné, tmavé ovoce, koření. Vhodné k hovězímu, zvěřině a těstovinám."], "739 Kč"] ] },
-      { k: "note", text: "DALŠÍ VÍNA DLE AKTUÁLNÍ NABÍDKY", caps: true }
+        ["Pouilly-Fuissé 1er Cru", "André Goichot", "Burgundsko, Francie", ["Plné a komplexní Chardonnay s tóny zralého ovoce a jemným dotekem dubu.", "Chuť: broskev / oříšky / máslo", "Vhodné k drůbeži a krémovým jídlům."], "2 490 Kč"],
+        ["Sangiovese Bianco Toscana", "Capanna", "Toskánsko, Itálie", ["Svěží a originální bílá varianta Sangiovese s tóny bílého ovoce a květin.", "Vhodné k těstovinám, risottu a lehkým jídlům."], "1 290 Kč"] ] }
     ]},
-    { id: "moravska", nav: "Moravská", blocks: [
-      { k: "head", spaced: "MORAVSKÁ VÍNA", line: true },
+    { id: "cervena", nav: "Červená", blocks: [
+      { k: "head", img: "cervena", alt: "červená vína", sub: "vybraná červená vína" },
+      { k: "wine", items: [
+        ["Perricone Talia BIO", "Tenute Mokarta", "Sicílie, Itálie", ["Plné a sametové červené víno z BIO produkce.", "Chuť: tmavé ovoce / koření", "Vhodné k hovězímu, zvěřině a těstovinám."], "739 Kč"] ] }
+    ]},
+    { id: "moravska", nav: "Moravská & naturální", blocks: [
+      { k: "head", spaced: "MORAVSKÁ", spaced2: "A NATURÁLNÍ VÍNA", line: true },
       { k: "wine", compact: true, items: [
-        ["Krásná Hora", "", "biodynamické vinařství", ["Ryzlink vlašský, Chardonnay, Sauvignon, Rulandské šedé, Pinot"], "590 Kč"],
-        ["Nestarec Natural Selection", "", "organické a biodynamické vinařství", ["Vesper, Dopamin, Umami"], "890 Kč"],
-        ["Vinařství Kubík", "", "", ["Sauvignon, Tramín červený, Chardonnay, Rulandské šedé, Veltlínské zelené, Ryzlink vlašský, Ryzlink rýnský, Frankovka, Pálava, Merlot, Frizzante bílé, Cuvée Freshuvka"], "490 Kč"],
-        ["Vinařství Ilias", "", "organická vína", ["Pinot Gris (Rulandské šedé), Ryzlink vlašský, Veltlínské zelené, Cabernet Rossé"], "590 Kč"],
-        ["Pet Nat 2025", "", "", [], "890 Kč"] ] }
+        ["Krásná Hora", "", "biodynamické vinařství · Morava", ["Výběr odrůd: Ryzlink vlašský, Chardonnay, Sauvignon, Rulandské šedé, Pinot"], "590 Kč"],
+        ["Nestarec Natural Selection", "Milan Nestarec", "organické a biodynamické vinařství · Morava", ["Výběr: Vesper, Dopamin, Umami"], "890 Kč"],
+        ["Vinařství Kubík", "", "Morava", ["Výběr odrůd: Sauvignon, Tramín červený, Chardonnay, Rulandské šedé, Veltlínské zelené, Ryzlink vlašský, Ryzlink rýnský, Frankovka, Pálava, Merlot, Frizzante bílé, Cuvée Freshuvka"], "490 Kč"],
+        ["Vinařství Ilias", "", "organická vína · Morava", ["Výběr odrůd: Pinot Gris (Rulandské šedé), Ryzlink vlašský, Veltlínské zelené, Cabernet Rosé"], "590 Kč"],
+        ["Pet Nat 2025", "", "Morava", [], "890 Kč"] ] }
     ]},
-    { id: "sumiva", nav: "Šumivá & prosecco", blocks: [
-      { k: "head", spaced: "ŠUMIVÁ VÍNA", img2: "cava", spaced2: "& PROSECCO" },
-      { k: "list", unit: "Kč", items: [
-        ["Stracchetto Extra Dry","",360],["La Cavea Prosecco Brut","",390],["Prosecco Andrea Biasiotto","",390],["Prosecco Andrea Biasiotto Rosado","",390],["Prosecco Andrea Biasiotto bez cukru","",390],["Prosecco Rosé Stracchetto","",390],["Gran Cuvée Spumante La Casada","",260],["Prosecco DOC Spumante Brut Le Rive","",590],["Prosecco Emma DOCG","",690],["Prosecco Valdobbiadene DOCG Campo del Passo","",550],
-        ["Spumante Pinot Bianco Brut","",550],["Otello Ceci Color (Lambrusco)","",550],["Prosecco Valdobbiadene DOCG","",550],["Follador Zero Sugar","",650],["Follador Brut","",650],["Prosecco DOC Brut Le Rive","",550],["Prosecco Brut Emma DOCG","",550],["Crémant de Limoux Blanc / Rosé","",550],["Benito Escudero Nature Brut","",690],["Becquer Semi Seco","",550],["Varias Genui Brut Nature","",390],["Varias Genui Brut","",390],["Berral Miró Brut Nature Reserva","",550],["Becquer Rosado Brut","",550] ] },
-      { k: "note", color: "red", text: "NABÍDKA VÍN SE MŮŽE LIŠIT", caps: true }
+    { id: "bubliny", nav: "Prosecco & bubliny", blocks: [
+      { k: "head", spaced: "PROSECCO", img2: "cava", spaced2: "A DALŠÍ BUBLINY" },
+      { k: "list", unit: "Kč", rich: true, items: [
+        ["Stracchetto Extra Dry","Itálie",360],["La Cavea Prosecco Brut","Itálie",390],["Prosecco Andrea Biasiotto","Itálie",390],["Prosecco Andrea Biasiotto Rosado","Itálie",390],["Prosecco Andrea Biasiotto bez cukru","Itálie",390],["Prosecco Rosé Stracchetto","Itálie",390],
+        ["Gran Cuvée Spumante La Casada","Itálie",260],["Prosecco DOC Spumante Brut Le Rive","Itálie",590],["Prosecco Emma DOCG","Itálie",690],["Prosecco Valdobbiadene DOCG Campo del Passo","Itálie",550],["Spumante Pinot Bianco Brut","Itálie",550],["Otello Ceci Color (Lambrusco)","Itálie",550],
+        ["Prosecco Valdobbiadene DOCG","Itálie",550],["Follador Zero Sugar","Follador · Itálie",650],["Follador Brut","Follador · Itálie",650],["Prosecco DOC Brut Le Rive","Le Rive · Itálie",550],["Prosecco Brut Emma DOCG","Itálie",550],["Crémant de Limoux Blanc / Rosé","Francie",550],
+        ["Benito Escudero Nature Brut","Familia Escudero · Španělsko",690],["Becquer Semi Seco","Familia Escudero · Španělsko",550],["Varias Genui Brut Nature","Varias · Španělsko",390],["Varias Genui Brut","Varias · Španělsko",390],["Berral Miró Brut Nature Reserva","Berral i Miró · Španělsko",550],["Becquer Rosado Brut","Familia Escudero · Španělsko",550] ] }
     ]},
     { id: "champagne", nav: "Champagne", blocks: [
       { k: "head", spaced: "CHAMPAGNE", dotline: true },
       { k: "wine", items: [
-        ["André Clouet", "", "Grande Réserve • Grand Cru • Brut • 100 % Pinot Noir", ["Plné, elegantní Champagne s tóny citrusů, ovoce a briošky."], "2 290 Kč"],
-        ["Joseph Perrier", "", "Cuvée Royale • Brut", ["Svěží a elegantní Champagne s tóny jablka, hrušky a broskve."], "2 590 Kč"],
-        ["Franck Bonville", "", "Unisson • Grand Cru • Blanc de Blancs • 100 % Chardonnay", ["Jemné, krémové Champagne s tóny citrusů, briošky a mandlí."], "3 290 Kč"],
-        ["Marguet", "", "Shaman 22 • Grand Cru • Extra Brut", ["Výrazné a suché Champagne s tóny citrusů, koření a minerality."], "3 490 Kč"],
-        ["Benoît Lahaye", "", "Blanc de Noirs • Grand Cru • 100 % Pinot Noir", ["Komplexní, minerální Champagne s ovocem a dlouhým svěžím závěrem."], "3 490 Kč"] ] }
+        ["Joseph Perrier Cuvée Royale Brut", "Joseph Perrier", "Champagne, Francie", ["Svěží a elegantní Champagne s tóny jablka, hrušky a broskve."], "2 590 Kč"],
+        ["Marguet Shaman 22 Grand Cru Extra Brut", "Marguet", "Champagne, Francie", ["Výrazné a suché Champagne s tóny citrusů, koření a minerality."], "3 490 Kč"],
+        ["Benoît Lahaye Blanc de Noirs Grand Cru", "Benoît Lahaye", "Champagne, Francie", ["Komplexní, minerální Champagne ze 100 % Pinot Noir s ovocem a dlouhým svěžím závěrem."], "3 490 Kč"] ] },
+      { k: "note", text: "André Clouet a Franck Bonville najdete ve Výběru Vibe." }
     ]},
     { id: "italie", nav: "Itálie", blocks: [
-      { k: "head", deco: "ITÁLIE", color: "red", line: true },
-      { k: "list", label: "italská vína · oblast", unit: "Kč", rich: true, items: [
-        ["Pinot Grigio Santa Sofia DOC","Veneto",390],["Sangiovese Bianco Duca di Saragnano","Toscana",490],["Chardonnay Duca di Saragnano","Toscana",450],["Pinot Grigio Garda","Veneto",350],["Bardolino DOC Cantina del Garda","Veneto",390],["Aglianico Primitivo","Puglia",450] ] }
+      { k: "head", deco: "ITALSKÁ VÍNA", color: "red", line: true },
+      { k: "list", unit: "Kč", rich: true, items: [
+        ["Pinot Grigio Santa Sofia DOC","Santa Sofia · Veneto, Itálie",390],["Sangiovese Bianco Duca di Saragnano","Duca di Saragnano · Toskánsko, Itálie",490],["Chardonnay Duca di Saragnano","Duca di Saragnano · Toskánsko, Itálie",450],["Pinot Grigio Garda","Veneto, Itálie",350],["Bardolino DOC Cantina del Garda","Cantina del Garda · Veneto, Itálie",390],["Aglianico Primitivo","Apulie, Itálie",450] ] }
     ]},
     { id: "spanelsko", nav: "Španělsko", blocks: [
-      { k: "head", deco: "ŠPANĚLSKO", color: "red", line: true },
-      { k: "list", label: "španělská vína · oblast", unit: "Kč", rich: true, items: [
-        ["Las Camelias Sauvignon Blanc","Vino de la Tierra de Castilla",390],["Pardina Las Guardias","Vino de la Tierra de Castilla",250],["Rioja Heredad Bienzoval Blanco","Rioja DOCa",350],["Rioja Heredad Bienzoval Rosado","Rioja DOCa",350],["Las Camelias Cabernet Sauvignon","Vino de la Tierra de Castilla",390],["Tempranillo Las Guardias","Vino de la Tierra de Castilla",390],["Rioja Heredad Bienzoval Tinto","Rioja DOCa",350] ] }
+      { k: "head", deco: "ŠPANĚLSKÁ VÍNA", color: "red", line: true },
+      { k: "list", unit: "Kč", rich: true, items: [
+        ["Las Camelias Sauvignon Blanc","Castilla, Španělsko",390],["Pardina Las Guardias","Castilla, Španělsko",250],["Rioja Heredad Bienzoval Blanco","Heredad Bienzoval · Rioja, Španělsko",350],["Rioja Heredad Bienzoval Rosado","Heredad Bienzoval · Rioja, Španělsko",350],["Las Camelias Cabernet Sauvignon","Castilla, Španělsko",390],["Tempranillo Las Guardias","Castilla, Španělsko",390],["Rioja Heredad Bienzoval Tinto","Heredad Bienzoval · Rioja, Španělsko",350] ] }
     ]},
-    { id: "family-gil", nav: "Family Gil", blocks: [
-      { k: "head", img: "family", alt: "Family Gil", big: true },
-      { k: "list", label: "španělská vína · oblast", unit: "Kč", rich: true, items: [
-        ["Pedrera Blanco 2023","Jumilla DO",350],["Juan Gil Moscatel 2023","Jumilla DO",350],["Disfrutando 0 % Espumoso","Jumilla DO",370,"NEALKO"],["Vidilla 2023","Jumilla DO",330],["Shaya Verdejo ECO 2023","Rueda DO",490],["Arindo Verdejo 2022","Rueda DO",350],["Disfrutando 0 % Rosé","Jumilla DO",390,"NEALKO"],["Honoro Vera Rosado 2023","Jumilla DO",390],["El Vigia de la Atalaya 2023","Almansa DO",390],["Alto De Rana 2022","Yecla DO",359],
-        ["Juan Gil Etiqueta Azul 2022","Jumilla DO",650],["Al Amat 2022","Almansa DO",359],["Aya 2022 Caja","Jumilla DO",300],["Salto de Rana 2022 ECO","Jumilla DO",390],["Honoro Vera Garnacha 2022","Valencia DO",350],["Comoloco Bajo Histaminas ECO","Valencia DO",330],["Juan Gil Etiqueta Plata 2021 ECO","Jumilla DO",450],["La Atalaya 2021","Almansa DO",350],["Rosario Vera 2019","Jumilla DO",450],["Atteca 2021","Calatayud DO",450],["Tridente Tempranillo 2020","Castilla y León",500],["La Atalaya del Camino","Almansa DO",890],["Alaya Tierra","Almansa DO","1 200"],["Godina","Campo de Borja DO","1 250"],["Biloba de Vera","Rioja DOCa","1 500"],["Clar del Bosc 2020","Montsant DO","1 900"],
-        ["Atteca Armas 2021","Calatayud DO","1 900"],["Morca","D.O. Campo de Borja","2 100"],["Rejón 2020","Jumilla DO","2 190"],["Juan Gil Blue Label 2018","Jumilla DO","3 700"] ] }
+    { id: "family-gil", nav: "Gil Family Estates", blocks: [
+      { k: "head", img: "family", alt: "Family Gil", big: true, sub: "Španělsko – Gil Family Estates" },
+      { k: "list", unit: "Kč", rich: true, items: [
+        ["Pedrera Blanco 2023","Jumilla, Španělsko",350],["Juan Gil Moscatel 2023","Juan Gil · Jumilla, Španělsko",350],["Disfrutando 0 % Espumoso","Jumilla, Španělsko",370,"NEALKO"],["Vidilla 2023","Jumilla, Španělsko",330],["Shaya Verdejo ECO 2023","Shaya · Rueda, Španělsko",490],["Arindo Verdejo 2022","Rueda, Španělsko",350],["Disfrutando 0 % Rosé","Jumilla, Španělsko",390,"NEALKO"],
+        ["Honoro Vera Rosado 2023","Honoro Vera · Jumilla, Španělsko",390],["El Vigia de la Atalaya 2023","Bodegas Atalaya · Almansa, Španělsko",390],["Alto De Rana 2022","Yecla, Španělsko",359],["Juan Gil Etiqueta Azul 2022","Juan Gil · Jumilla, Španělsko",650],["Al Amat 2022","Almansa, Španělsko",359],["Aya 2022 Caja","Jumilla, Španělsko",300],["Salto de Rana 2022 ECO","Jumilla, Španělsko",390],
+        ["Honoro Vera Garnacha 2022","Honoro Vera · Valencia, Španělsko",350],["Comoloco Bajo Histaminas ECO","Valencia, Španělsko",330],["Juan Gil Etiqueta Plata 2021 ECO","Juan Gil · Jumilla, Španělsko",450],["La Atalaya 2021","Bodegas Atalaya · Almansa, Španělsko",350],["Rosario Vera 2019","Jumilla, Španělsko",450],["Atteca 2021","Atteca · Calatayud, Španělsko",450],["Tridente Tempranillo 2020","Tridente · Castilla y León, Španělsko",500],
+        ["La Atalaya del Camino","Bodegas Atalaya · Almansa, Španělsko",890],["Godina","Campo de Borja, Španělsko","1 250"],["Biloba de Vera","Rioja, Španělsko","1 500"],["Clar del Bosc 2020","Montsant, Španělsko","1 900"],["Atteca Armas 2021","Atteca · Calatayud, Španělsko","1 900"],["Morca","Campo de Borja, Španělsko","2 100"],["Rejón 2020","Jumilla, Španělsko","2 190"] ] }
     ]},
-    { id: "evropska", nav: "Evropská vína", blocks: [
-      { k: "head", deco: "EVROPSKÁ VÍNA", color: "red", sub: "Francie | Itálie | Rakousko | Německo" },
-      { k: "list", label: "oblast", unit: "Kč", rich: true, items: [
-        ["Chardonnay Luc Pirlet","Francie – Languedoc",469],["Sauvignon Luc Pirlet","Francie – Languedoc",469],["Toscana Bianco Sangiovese","Itálie – Toscana",469],["Michel Lynch Sauvignon Blanc","Francie – Bordeaux",649],["Grüner Veltliner Weingut Kellner","Rakousko – Weinviertel",519],["Riesling trocken Mineralgestein Weingut Manz","Německo – Rheinhessen",698],["Pinot Grigio Antichello Santa Sofia","Itálie – Veneto",471],
-        ["Rivaner Weingut Gentsch","Německo – Mosel",626],["Petit Chablis Domaine Fourrey","Francie – Bourgogne","1 107"],["Primitivo Rosé Paolo Leo","Itálie – Puglia",469],["Syrah Rosé Luc Pirlet","Francie – Languedoc",469],["Toscana Sangiovese Duca di Saragnano","Itálie – Toscana",469],["Pinot Noir Reserve Luc Pirlet","Francie – Languedoc",649] ] },
+    { id: "evropsky-vyber", nav: "Evropský výběr", blocks: [
+      { k: "head", deco: "EVROPSKÝ VÝBĚR", color: "red", sub: "Francie | Itálie | Rakousko | Německo" },
+      { k: "list", unit: "Kč", rich: true, items: [
+        ["Chardonnay Luc Pirlet","Luc Pirlet · Languedoc, Francie",469],["Sauvignon Luc Pirlet","Luc Pirlet · Languedoc, Francie",469],["Toscana Bianco Sangiovese","Toskánsko, Itálie",469],["Michel Lynch Sauvignon Blanc","Michel Lynch · Bordeaux, Francie",649],["Grüner Veltliner Weingut Kellner","Weingut Kellner · Weinviertel, Rakousko",519],["Riesling trocken Mineralgestein Weingut Manz","Weingut Manz · Rheinhessen, Německo",698],["Pinot Grigio Antichello Santa Sofia","Santa Sofia · Veneto, Itálie",471],
+        ["Rivaner Weingut Gentsch","Weingut Gentsch · Mosel, Německo",626],["Petit Chablis Domaine Fourrey","Domaine Fourrey · Burgundsko, Francie","1 107"],["Primitivo Rosé Paolo Leo","Paolo Leo · Apulie, Itálie",469],["Syrah Rosé Luc Pirlet","Luc Pirlet · Languedoc, Francie",469],["Toscana Sangiovese Duca di Saragnano","Duca di Saragnano · Toskánsko, Itálie",469],["Pinot Noir Reserve Luc Pirlet","Luc Pirlet · Languedoc, Francie",649] ] }
+    ]},
+    { id: "rozlevana", nav: "Rozlévaná", blocks: [
+      { k: "head", deco: "ROZLÉVANÁ VÍNA", line: true, sub2: ["dle aktuální nabídky","VINAŘSTVÍ STRACHOTÍN"] },
+      { k: "prices", cols: [["0,18 l","65 Kč"],["0,5 l","149 Kč"],["1 l","279 Kč"]] },
+      { k: "center", spacedNames: true, items: [["Vinný střik","suchý / polosuchý","0,3 l · 75 Kč"]] },
+      { k: "head", img: "bila", alt: "bílá vína" },
+      { k: "center", items: [["Irsai Oliver","Maďarsko · 11 % · polosladké"],["Grüner Veltliner","Rakousko · 12 % · suché"],["Pinot Gris","Maďarsko · 12 % · suché"],["Chardonnay","Maďarsko · 11,5 % · polosuché"],["Tramín červený","Maďarsko · 12 % · polosuché"]] },
+      { k: "head", img: "cervena", alt: "červená vína" },
+      { k: "center", items: [["Primitivo","Itálie · 13,5 % · suché"],["Merlot","Španělsko · 13 % · suché"],["Cabernet Sauvignon","Španělsko · 13 % · suché"]] }
+    ]},
+    { id: "cepovane", nav: "Čepované bubliny", blocks: [
+      { k: "box", title: "STRACCHETTO GLERA FRIZZANTE", deco: true, foot: "glasses", blocks: [
+        { k: "prices", cols: [["0,18 l","89 Kč"],["0,5 l","175 Kč"],["1 l","299 Kč"]], bare: true },
+        { k: "note", text: "ITALSKÉ ČEPOVANÉ BUBLINY", caps: true }
+      ]},
+      { k: "box", title: "NERO PROSECCO 0 %", deco: true, badge: "NEALKO", blocks: [
+        { k: "note", text: "NEALKO BUBLINY", caps: true },
+        { k: "list", items: [["0,15 l","","90 Kč"],["0,75 l","","400 Kč"]] }
+      ]},
       { k: "thanks", title: "DĚKUJEME,", text: "že podporujete kvalitní vína & atmosféru našeho klubu." }
     ]}
   ]
@@ -640,7 +653,7 @@ const R = {
   prices(b){ return `<div class="prices${b.bare?" bare":""}">${b.cols.map(([v,p])=>`<div><small>${esc(v)}</small><b>${esc(p)}</b></div>`).join("")}</div>`; },
   wine(b){
     return `<div class="wine${b.compact?" compact":""}">` + b.items.map(([n,pr,rg,nt,p]) =>
-      `<div class="wi it" data-n="${esc(n)}" data-d="${esc([pr,rg].filter(Boolean).join(", "))}" data-p="${esc(p)}"><div class="n">${esc(n)}</div>${pr?`<div class="pr">${esc(pr)}</div>`:""}${rg?`<div class="rg">${b.compact?"— "+esc(rg)+" —":"• "+esc(rg)+" •"}</div>`:""}${nt.length?`<div class="nt">${nt.map(t=>`<p>${esc(t)}</p>`).join("")}</div>`:""}<div class="p">${esc(p)}</div></div>`).join("") + `</div>`;
+      `<div class="wi it" data-n="${esc(n)}" data-d="${esc([pr,rg].filter(Boolean).join(", "))}" data-p="${esc(p)}"><div class="n">${esc(n)}</div>${pr?`<div class="pr">${esc(pr)}</div>`:""}${rg?`<div class="rg">${b.compact?"— "+esc(rg)+" —":"• "+esc(rg)+" •"}</div>`:""}${nt.length?`<div class="nt">${nt.map(t=>`<p>${esc(t).replace(/^(Chuť|Výběr odrůd|Výběr):/,"<b>$1:</b>")}</p>`).join("")}</div>`:""}<div class="p">${esc(p)}</div></div>`).join("") + `</div>`;
   },
   thanks(b){ return `<div class="thanks"><h3>${esc(b.title)}</h3><p>${esc(b.text)}</p></div>`; }
 };
