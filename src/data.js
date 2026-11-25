@@ -258,7 +258,7 @@ const TABS = [
       ]}
     ]},
     { id: "vyber-vibe", nav: "Výběr Vibe", blocks: [
-      { k: "head", deco: "VÝBĚR VIBE", color: "red", sub: "10 vín s příběhem", line: true },
+      { k: "head", script: "výběr vibe", sub: "10 vín s příběhem" },
       { k: "wine", items: [
         ["Chablis 1er Cru Côte de Lechet 2022", "Domaine Fourrey", "Burgundsko, Francie", ["Chardonnay s výraznou svěžestí a dlouhým závěrem.", "Chuť: citrusy / bílé ovoce / mineralita", "Vhodné k rybám a mořským plodům."], "1 690 Kč"],
         ["Châteauneuf-du-Pape Blanc 2023", "Domaine des Sénéchaux", "Rhône, Francie", ["Výrazně aromatické víno s krásnou strukturou a dlouhým závěrem.", "Chuť: bílá broskev / bylinky / květy", "Vhodné k rybám, drůbeži a jemné kuchyni."], "2 590 Kč"],
@@ -272,13 +272,13 @@ const TABS = [
         ["Guido Manara Rosso Veneto IGP 2018", "Manara", "Veneto, Itálie", ["Chuť: švestka / třešeň / kakao / koření"], "2 290 Kč"] ] }
     ]},
     { id: "velka-bila", nav: "Velká bílá", blocks: [
-      { k: "head", img: "bila", alt: "bílá vína", sub: "velká bílá vína" },
+      { k: "head", script: "velká bílá vína", color: "orange" },
       { k: "wine", items: [
         ["Pouilly-Fuissé 1er Cru", "André Goichot", "Burgundsko, Francie", ["Plné a komplexní Chardonnay s tóny zralého ovoce a jemným dotekem dubu.", "Chuť: broskev / oříšky / máslo", "Vhodné k drůbeži a krémovým jídlům."], "2 490 Kč"],
         ["Sangiovese Bianco Toscana", "Capanna", "Toskánsko, Itálie", ["Svěží a originální bílá varianta Sangiovese s tóny bílého ovoce a květin.", "Vhodné k těstovinám, risottu a lehkým jídlům."], "1 290 Kč"] ] }
     ]},
     { id: "cervena", nav: "Červená", blocks: [
-      { k: "head", img: "cervena", alt: "červená vína", sub: "vybraná červená vína" },
+      { k: "head", script: "vybraná červená vína" },
       { k: "wine", items: [
         ["Perricone Talia BIO", "Tenute Mokarta", "Sicílie, Itálie", ["Plné a sametové červené víno z BIO produkce.", "Chuť: tmavé ovoce / koření", "Vhodné k hovězímu, zvěřině a těstovinám."], "739 Kč"] ] }
     ]},

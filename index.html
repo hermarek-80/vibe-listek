@@ -7,12 +7,14 @@
 <title>Vibe Zlín – nápojový lístek</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif&family=Poiret+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.typekit.net/inw0jyz.css">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif&display=swap" rel="stylesheet">
 <style>
 /* Layout: one narrow column like the 100×270 mm print, sticky tabs + category chips, background colour follows the active menu */
 :root{
   --bg:#FBE4E3; --bg-deep:#F6D3D2; --ink:#1E1414; --muted:#8C8380; --red:#EE3B1F; --orange:#F0891C; --dark:#1E1414;
-  --display:"Poiret One","Josefin Sans",Futura,"Century Gothic",sans-serif;
+  --display:"oskar-inline",Futura,"Century Gothic",sans-serif;
+  --script:"neonoir","Snell Roundhand","Segoe Script",cursive;
   --serif:"Instrument Serif","Bodoni 72",Didot,Georgia,serif;
   --body:"Figtree","Helvetica Neue",Arial,sans-serif;
   color-scheme:light;
@@ -51,7 +53,7 @@ button{font:inherit;color:inherit}
 .panel[hidden]{display:none}
 .cover{text-align:center;padding:34px 0 18px}
 .cover .quote{font:500 12.5px/1.5 var(--body);letter-spacing:.06em;text-transform:uppercase;margin:0 0 22px}
-.cover .pre{font:400 40px/1 var(--display);letter-spacing:.06em;-webkit-text-stroke:.6px currentColor;margin:0}
+.cover .pre{font:400 40px/1 var(--display);letter-spacing:.03em;margin:0}
 .cover img{width:min(220px,62%);margin:4px auto 0}
 section.sec{padding:30px 0 8px;border-top:0}
 section.sec + section.sec{margin-top:6px}
@@ -59,8 +61,14 @@ section.sec + section.sec{margin-top:6px}
 /* headings */
 .hd{text-align:center;margin:8px 0 18px;position:relative}
 .hd h2,.hd h3{margin:0;font-weight:400;text-wrap:balance}
-.deco{font:400 34px/1.08 var(--display);letter-spacing:.07em;-webkit-text-stroke:.55px currentColor}
-.hd.small .deco{font-size:24px}
+.deco{font:400 30px/1.12 var(--display);letter-spacing:.03em}
+.hd.small .deco{font-size:22px}
+/* print-style double rules either side of a heading: ═ ROZLÉVANÁ VÍNA ═ */
+.deco.rules::before,.deco.rules::after{content:"";display:inline-block;width:.75em;height:.2em;border-top:2px solid currentColor;border-bottom:2px solid currentColor;vertical-align:.3em;margin:0 .22em}
+/* Neonoir script headings – sized to match the script headings cut from the print files */
+.scr{display:inline-block;position:relative;font:200 52px/1 var(--script);color:var(--red);padding:0 12px 14px;margin:0 auto}
+.scr.c-orange{color:var(--orange)} .scr.c-ink{color:var(--ink)}
+.scr::after{content:"";position:absolute;left:2px;right:2px;bottom:0;height:12px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 5 170 2 297 4' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 5 170 2 297 4' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat}
 .serif{font:400 40px/1 var(--serif);letter-spacing:-.005em}
 .hd.big .serif{font-size:56px}
 .spaced{font:500 19px/1.3 var(--body);letter-spacing:.32em;text-transform:uppercase;padding-left:.32em}
@@ -113,7 +121,7 @@ section.sec + section.sec{margin-top:6px}
 .box{position:relative;margin:34px 0 34px;padding:30px 18px 26px;border:2px dotted color-mix(in srgb,var(--red) 70%,transparent);border-radius:22px;text-align:center}
 .box > .bt{position:absolute;left:50%;top:0;transform:translate(-50%,-55%);background:var(--bg);padding:0 12px;white-space:nowrap;transition:background-color .35s}
 .box > .bt.txt{font:500 17px/1.25 var(--body);letter-spacing:.2em;text-transform:uppercase;padding-left:calc(12px + .2em)}
-.box > .bt.deco{font:400 24px/1.1 var(--display);letter-spacing:.06em;-webkit-text-stroke:.5px currentColor;white-space:normal;width:max-content;max-width:80%}
+.box > .bt.deco{font:400 22px/1.15 var(--display);letter-spacing:.03em;white-space:normal;width:max-content;max-width:80%}
 .box > .bt img{height:62px;width:auto}
 .box > .bt img.ico{height:44px}
 .box.hasimg{padding-top:44px}
@@ -141,8 +149,8 @@ section.sec + section.sec{margin-top:6px}
 
 .intro{text-align:center;margin:8px 0 28px;padding:22px 0 6px}
 .intro .rule{height:4px;background:radial-gradient(circle,var(--red) .9px,transparent 1.3px) 0 0/5px 4px repeat-x;opacity:.7}
-.intro h2{margin:16px 0 16px;font:400 32px/1.1 var(--display);letter-spacing:.07em;color:var(--red);-webkit-text-stroke:.55px currentColor}
-.intro.plain h2{font:500 16px/1.35 var(--body);letter-spacing:.04em;color:var(--ink);-webkit-text-stroke:0}
+.intro h2{margin:16px 0 16px;font:400 30px/1.12 var(--display);letter-spacing:.03em;color:var(--red)}
+.intro.plain h2{font:500 16px/1.35 var(--body);letter-spacing:.04em;color:var(--ink)}
 .intro img{height:62px;margin:4px auto 14px}
 .intro p{margin:0 0 6px;font-size:15.5px}
 
@@ -500,7 +508,7 @@ const TABS = [
       ]}
     ]},
     { id: "vyber-vibe", nav: "Výběr Vibe", blocks: [
-      { k: "head", deco: "VÝBĚR VIBE", color: "red", sub: "10 vín s příběhem", line: true },
+      { k: "head", script: "výběr vibe", sub: "10 vín s příběhem" },
       { k: "wine", items: [
         ["Chablis 1er Cru Côte de Lechet 2022", "Domaine Fourrey", "Burgundsko, Francie", ["Chardonnay s výraznou svěžestí a dlouhým závěrem.", "Chuť: citrusy / bílé ovoce / mineralita", "Vhodné k rybám a mořským plodům."], "1 690 Kč"],
         ["Châteauneuf-du-Pape Blanc 2023", "Domaine des Sénéchaux", "Rhône, Francie", ["Výrazně aromatické víno s krásnou strukturou a dlouhým závěrem.", "Chuť: bílá broskev / bylinky / květy", "Vhodné k rybám, drůbeži a jemné kuchyni."], "2 590 Kč"],
@@ -514,13 +522,13 @@ const TABS = [
         ["Guido Manara Rosso Veneto IGP 2018", "Manara", "Veneto, Itálie", ["Chuť: švestka / třešeň / kakao / koření"], "2 290 Kč"] ] }
     ]},
     { id: "velka-bila", nav: "Velká bílá", blocks: [
-      { k: "head", img: "bila", alt: "bílá vína", sub: "velká bílá vína" },
+      { k: "head", script: "velká bílá vína", color: "orange" },
       { k: "wine", items: [
         ["Pouilly-Fuissé 1er Cru", "André Goichot", "Burgundsko, Francie", ["Plné a komplexní Chardonnay s tóny zralého ovoce a jemným dotekem dubu.", "Chuť: broskev / oříšky / máslo", "Vhodné k drůbeži a krémovým jídlům."], "2 490 Kč"],
         ["Sangiovese Bianco Toscana", "Capanna", "Toskánsko, Itálie", ["Svěží a originální bílá varianta Sangiovese s tóny bílého ovoce a květin.", "Vhodné k těstovinám, risottu a lehkým jídlům."], "1 290 Kč"] ] }
     ]},
     { id: "cervena", nav: "Červená", blocks: [
-      { k: "head", img: "cervena", alt: "červená vína", sub: "vybraná červená vína" },
+      { k: "head", script: "vybraná červená vína" },
       { k: "wine", items: [
         ["Perricone Talia BIO", "Tenute Mokarta", "Sicílie, Itálie", ["Plné a sametové červené víno z BIO produkce.", "Chuť: tmavé ovoce / koření", "Vhodné k hovězímu, zvěřině a těstovinám."], "739 Kč"] ] }
     ]},
@@ -595,7 +603,8 @@ const R = {
     const col = b.color ? ` c-${b.color}` : "";
     let h = "";
     if (b.img) h += `<h2><img class="script" src="${IMG[b.img]}" alt="${esc(b.alt)}"></h2>`;
-    if (b.deco) h += `<h2 class="deco${col}">${b.dots?'<span class="orn"></span>':''}${esc(b.deco)}${b.dots?'<span class="orn"></span>':''}</h2>`;
+    if (b.script) h += `<h2 class="scr${col}">${esc(b.script)}</h2>`;
+    if (b.deco) h += `<h2 class="deco${col}${b.dots||b.small?"":" rules"}">${b.dots?'<span class="orn"></span>':''}${esc(b.deco)}${b.dots?'<span class="orn"></span>':''}</h2>`;
     if (b.serif) h += `<h2 class="serif${col}">${esc(b.serif)}</h2>`;
     if (b.spaced) h += `<h2 class="spaced${col}">${esc(b.spaced)}</h2>`;
     if (b.img2) h += `<img class="script" style="height:46px;margin:2px auto" src="${IMG[b.img2]}" alt="cava">`;
