@@ -72,6 +72,9 @@ section.sec + section.sec{margin-top:6px}
 .scr .w{white-space:nowrap}
 .scr .acc{position:relative}
 .scr .mk{position:absolute;pointer-events:none}
+.oacc{position:relative}
+.oacc .omk{position:absolute;pointer-events:none}
+.obl{display:inline-block;width:0;height:0;vertical-align:baseline}
 .scr .dot{border-radius:50%;background:currentColor}
 .scr .er{background:var(--bg);-webkit-mask-size:100% 100%;mask-size:100% 100%;transition:background-color .35s}
 .scr .bl{display:inline-block;width:0;height:0;vertical-align:baseline}
@@ -702,7 +705,7 @@ function show(id, opts={}){
   });
   chipsEl.innerHTML = t.sections.map(s => `<button class="chip" type="button" data-sec="${t.id}-${s.id}">${esc(s.nav)}</button>`).join("");
   if (location.hash.slice(1) !== t.id) history.replaceState(null, "", "#"+t.id);
-  requestAnimationFrame(() => { fitUnderlines(); fixScripts().then(fitUnderlines); });
+  requestAnimationFrame(() => { fitUnderlines(); fixScripts().then(fitUnderlines); fixOskar(); });
   if (!opts.keepScroll) { window.scrollTo({top:0}); requestAnimationFrame(() => window.scrollTo({top:0})); }  /* again after layout: scroll anchoring can nudge it */
   spy();
 }
@@ -866,6 +869,68 @@ async function fixScripts(){
   }
 }
 
+/* Oskar Inline: until Adobe serves the full character set, build missing Czech capitals from the
+   font's own shapes – the háček is the font's double-line "V" scaled down (Oskar's caron is exactly that),
+   the ring is its "O". Letters the font has are never touched. */
+const ACC_OSKAR = { "Š":"S", "Ě":"E", "Č":"C", "Ř":"R", "Ž":"Z", "Ň":"N", "Ť":"T", "Ď":"D", "Ů":"U" };
+async function fixOskar(){
+  const els = [...document.querySelectorAll(".panel:not([hidden]) :is(.deco, .pre, .bt.deco, .intro h2):not([data-ok])")];
+  const todo = els.filter(el => [...el.textContent].some(ch => ACC_OSKAR[ch]));
+  els.filter(el => !todo.includes(el)).forEach(el => el.dataset.ok = "1");
+  if (!todo.length || !document.fonts) return;
+  try { await document.fonts.ready; } catch(e) { return; }
+  if (![...document.fonts].some(f => f.family.replace(/["']/g,"").toLowerCase() === "oskar-inline" && f.status === "loaded")) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  for (const el of todo) {
+    const cs = getComputedStyle(el), FS = parseFloat(cs.fontSize), color = cs.color;
+    const fontOf = fam => `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${fam}`;
+    try { await document.fonts.load(fontOf("oskar-inline"), "SECRZNTDUVO"); } catch(e) {}
+    const W = Math.ceil(FS*3), H = Math.ceil(FS*3), OX = FS, BY = FS*2;
+    const ink = (s, fam = "oskar-inline") => {
+      const c = document.createElement("canvas"); c.width = W*dpr; c.height = H*dpr; const x = c.getContext("2d", {willReadFrequently:true});
+      x.scale(dpr,dpr); x.font = fontOf(fam); x.fillText(s, OX, BY);
+      const d = x.getImageData(0,0,c.width,c.height).data; let x0=1e9,y0=1e9,x1=-1,y1=-1;
+      for (let y=0;y<c.height;y++) for (let xx=0;xx<c.width;xx++) if (d[(y*c.width+xx)*4+3]>60){ if(xx<x0)x0=xx; if(xx>x1)x1=xx; if(y<y0)y0=y; if(y>y1)y1=y; }
+      return x1<0 ? null : { x0:x0/dpr-OX, x1:x1/dpr-OX, top:y0/dpr-BY, bottom:y1/dpr-BY };
+    };
+    const has = ch => { const a = ink(ch, "oskar-inline, monospace"), b = ink(ch, "oskar-inline, serif"); return !!(a && b && a.x0===b.x0 && a.x1===b.x1 && a.top===b.top); };
+    const need = [...new Set([...el.textContent].filter(ch => ACC_OSKAR[ch] && !has(ch)))];
+    el.dataset.ok = "1";
+    if (!need.length) continue;
+    /* scaled-down font glyph ("V" for háček, "O" for ring) as a small canvas */
+    const markOf = (glyph, w, h) => {
+      const g = ink(glyph); const gw = g.x1-g.x0, gh = g.bottom-g.top;
+      const c = document.createElement("canvas"); c.width = Math.ceil((w+2)*dpr); c.height = Math.ceil((h+2)*dpr);
+      const x = c.getContext("2d"); x.scale(dpr,dpr); x.translate(1,1); x.scale(w/gw, h/gh); x.translate(-(OX+g.x0), -(BY+g.top));
+      x.font = fontOf("oskar-inline"); x.fillStyle = color; x.fillText(glyph, OX, BY);
+      c.className = "omk"; c.style.width = (w+2)+"px"; c.style.height = (h+2)+"px"; return c;
+    };
+    const orig = el.textContent;
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+    for (const n of nodes) {
+      if (![...n.data].some(ch => need.includes(ch))) continue;
+      const frag = document.createDocumentFragment();
+      for (const ch of n.data) {
+        if (!need.includes(ch)) { frag.appendChild(document.createTextNode(ch)); continue; }
+        const s = document.createElement("span"); s.className = "oacc"; s.textContent = ACC_OSKAR[ch];
+        s.setAttribute("aria-hidden","true"); s.dataset.o = ch; frag.appendChild(s);
+      }
+      n.replaceWith(frag);
+    }
+    el.setAttribute("aria-label", orig);   /* screen readers read the real word */
+    for (const s of el.querySelectorAll(".oacc")) {
+      const base = ink(s.textContent); if (!base) continue;
+      const capH = base.bottom - base.top, bw = base.x1 - base.x0, ring = s.dataset.o === "Ů";
+      const w = ring ? capH*0.26 : Math.max(bw*0.78, capH*0.42), h = ring ? capH*0.26 : capH*0.2;
+      const m = markOf(ring ? "O" : "V", w, h);
+      const sr = s.getBoundingClientRect(), bl = document.createElement("span"); bl.className = "obl"; s.appendChild(bl);
+      const baseline = bl.getBoundingClientRect().top - sr.top; bl.remove();
+      m.style.left = (base.x0 + bw/2 - (w+2)/2) + "px";
+      m.style.top = (baseline + base.top - capH*0.09 - h - 1) + "px";
+      s.appendChild(m);
+    }
+  }
+}
 /* script underline: under the last line only, as wide as that line (like the print swashes) */
 function fitUnderlines(){
   document.querySelectorAll(".panel:not([hidden]) .scr[data-scr]").forEach(h => {
@@ -880,7 +945,7 @@ function fitUnderlines(){
 const FS_LINE = h => parseFloat(getComputedStyle(h).fontSize);
 window.addEventListener("resize", () => requestAnimationFrame(fitUnderlines));
 /* web fonts may arrive after the first pass (slow mobile data) – try again then */
-if (document.fonts) document.fonts.addEventListener("loadingdone", () => { fixScripts().then(fitUnderlines); fitUnderlines(); });
+if (document.fonts) document.fonts.addEventListener("loadingdone", () => { fixScripts().then(fitUnderlines); fitUnderlines(); fixOskar(); });
 
 /* search */
 const search = $("#search"), q = $("#q"), sres = $("#sres");
