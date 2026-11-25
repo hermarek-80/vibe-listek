@@ -72,10 +72,11 @@ section.sec + section.sec{margin-top:6px}
 .scr .w{white-space:nowrap}
 .scr .acc{position:relative}
 .scr .mk{position:absolute;pointer-events:none}
+.scr .dot{border-radius:50%;background:currentColor}
 .scr .er{background:var(--bg);-webkit-mask-size:100% 100%;mask-size:100% 100%;transition:background-color .35s}
 .scr .bl{display:inline-block;width:0;height:0;vertical-align:baseline}
 .scr.c-orange{color:var(--orange)} .scr.c-ink{color:var(--ink)}
-.scr::after{content:"";position:absolute;left:2px;right:2px;bottom:0;height:12px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 5 170 2 297 4' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 5 170 2 297 4' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.scr::after{content:"";position:absolute;left:var(--ul-l,2px);width:var(--ul-w,calc(100% - 4px));bottom:0;height:12px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 5 170 2 297 4' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 5 170 2 297 4' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat}
 .serif{font:400 40px/1 var(--serif);letter-spacing:-.005em}
 .hd.big .serif{font-size:56px}
 .spaced{font:500 19px/1.3 var(--body);letter-spacing:.32em;text-transform:uppercase;padding-left:.32em}
@@ -364,7 +365,7 @@ function show(id, opts={}){
   });
   chipsEl.innerHTML = t.sections.map(s => `<button class="chip" type="button" data-sec="${t.id}-${s.id}">${esc(s.nav)}</button>`).join("");
   if (location.hash.slice(1) !== t.id) history.replaceState(null, "", "#"+t.id);
-  requestAnimationFrame(() => fixScripts());
+  requestAnimationFrame(() => { fitUnderlines(); fixScripts().then(fitUnderlines); });
   if (!opts.keepScroll) { window.scrollTo({top:0}); requestAnimationFrame(() => window.scrollTo({top:0})); }  /* again after layout: scroll anchoring can nudge it */
   spy();
 }
@@ -503,16 +504,19 @@ async function fixScripts(){
                                        : cutMark(".", null, color));
     const ref = { caron: () => ({ base: ink("s"), m: mark("caron") }), ring: () => ({ base: ink("a"), m: mark("ring") }) };
     for (const s of span.querySelectorAll(".acc")) {
-      const kind = s.dataset.k, b = ink(s.dataset.b), m = mark(kind); if (!b || !m) continue;
+      const kind = s.dataset.k, b = ink(s.dataset.b), m = kind === "dot" ? true : mark(kind); if (!b || !m) continue;
       let cx, bottom;
-      if (kind === "dot") {                       /* cover the font's tick with background, put a round dot in its place */
+      if (kind === "dot") {                       /* cover the font's tick with background, draw a round dot in its place */
         const tp = topPart("i"); if (!tp) continue;
         const sr0 = s.getBoundingClientRect(), base0 = s.querySelector(".bl").getBoundingClientRect().top - sr0.top;
         const er = document.createElement("span"); er.className = "mk er";
         Object.assign(er.style, { left: tp.left+"px", top: (base0 + tp.top)+"px", width: tp.w+"px", height: tp.h+"px",
           webkitMaskImage: `url(${tp.url})`, maskImage: `url(${tp.url})` });
         s.appendChild(er);
-        cx = tp.cx; bottom = tp.cy + m.h/2;
+        const d = Math.max(3, FS * 0.085), dot = document.createElement("span"); dot.className = "mk dot";
+        Object.assign(dot.style, { left: (tp.cx - d/2)+"px", top: (base0 + tp.cy - d/2)+"px", width: d+"px", height: d+"px" });
+        s.appendChild(dot);
+        continue;
       } else {                                    /* same offset/gap as the háček over š or ring over å */
         const r = ref[kind](); cx = b.topCx + (m.cx - r.base.topCx); bottom = b.top - (r.base.top - m.bottom);
       }
@@ -525,8 +529,21 @@ async function fixScripts(){
   }
 }
 
+/* script underline: under the last line only, as wide as that line (like the print swashes) */
+function fitUnderlines(){
+  document.querySelectorAll(".panel:not([hidden]) .scr[data-scr]").forEach(h => {
+    const r = document.createRange(); r.selectNodeContents(h.querySelector("span"));
+    const rects = [...r.getClientRects()].filter(x => x.width > 1 && x.height > 1); if (!rects.length) return;
+    const lastBottom = Math.max(...rects.map(x => x.bottom));
+    const line = rects.filter(x => Math.abs(x.bottom - lastBottom) < FS_LINE(h)/2);
+    const L = Math.min(...line.map(x => x.left)), Rr = Math.max(...line.map(x => x.right)), hr = h.getBoundingClientRect();
+    h.style.setProperty("--ul-l", (L - hr.left - 8)+"px"); h.style.setProperty("--ul-w", (Rr - L + 16)+"px");
+  });
+}
+const FS_LINE = h => parseFloat(getComputedStyle(h).fontSize);
+window.addEventListener("resize", () => requestAnimationFrame(fitUnderlines));
 /* web fonts may arrive after the first pass (slow mobile data) – try again then */
-if (document.fonts) document.fonts.addEventListener("loadingdone", () => fixScripts());
+if (document.fonts) document.fonts.addEventListener("loadingdone", () => { fixScripts().then(fitUnderlines); fitUnderlines(); });
 
 /* search */
 const search = $("#search"), q = $("#q"), sres = $("#sres");
