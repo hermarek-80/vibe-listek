@@ -71,6 +71,7 @@ section.sec + section.sec{margin-top:6px}
 .scr .w{white-space:nowrap}
 .scr .acc{position:relative}
 .scr .mk{position:absolute;pointer-events:none}
+.scr .er{background:var(--bg);-webkit-mask-size:100% 100%;mask-size:100% 100%;transition:background-color .35s}
 .scr .bl{display:inline-block;width:0;height:0;vertical-align:baseline}
 .scr.c-orange{color:var(--orange)} .scr.c-ink{color:var(--ink)}
 .scr::after{content:"";position:absolute;left:2px;right:2px;bottom:0;height:12px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 5 170 2 297 4' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 5 170 2 297 4' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat}
@@ -761,7 +762,7 @@ show(location.hash.slice(1) || "napoje");
    Rebuild those letters from the font's own shapes: the háček is cut out of “š” (š minus s),
    the ring out of “å”, and the i gets a round dot taken from “.”. Measured on a canvas in the
    visitor's browser, so placement follows the real glyphs; if the font isn't loaded, nothing changes. */
-const ACC = { "ě":["e","caron"], "č":["c","caron"], "ř":["r","caron"], "ň":["n","caron"], "ů":["u","ring"], "i":["ı","dot"] };
+const ACC = { "ě":["e","caron"], "č":["c","caron"], "ř":["r","caron"], "ň":["n","caron"], "ů":["u","ring"], "i":["i","dot"] };
 async function fixScripts(){
   const heads = [...document.querySelectorAll(".panel:not([hidden]) .scr[data-scr]:not([data-done])")];
   if (!heads.length || !document.fonts) return;
@@ -787,8 +788,21 @@ async function fixScripts(){
     const P = v => v/dpr;
     return { x0:P(x0)-OX, x1:P(x1)-OX, top:P(y0)-BY, bottom:P(y1)-BY, topCx:P(sx/n)-OX, data:d, cw:c.width, ch:c.height };
   };
-  /* does the font itself have dotless ı? (same pixels whatever the fallback) */
-  const hasGlyph = ch => { const a = ink(ch, "neonoir, monospace"), b = ink(ch, "neonoir, serif"); return a && b && a.x0===b.x0 && a.x1===b.x1 && a.top===b.top; };
+  /* the detached top part of a glyph (the i-dot): rows above the first empty row gap */
+  const topPart = ch => {
+    const f = ink(ch); if (!f) return null;
+    const rowHas = y => { for (let x=0;x<f.cw;x++) if (f.data[(y*f.cw+x)*4+3]>20) return true; return false; };
+    let y = 0; while (y < f.ch && !rowHas(y)) y++;
+    const y0 = y; while (y < f.ch && rowHas(y)) y++;
+    const yEnd = y; let g = y; while (g < f.ch && !rowHas(g)) g++;
+    if (g >= f.ch || g - yEnd < 1) return null;           /* no separate dot */
+    const R = Math.round(2*dpr);                           /* grow the eraser a little */
+    let x0=1e9,x1=-1; for (let yy=y0;yy<yEnd;yy++) for (let x=0;x<f.cw;x++) if (f.data[(yy*f.cw+x)*4+3]>20){ if(x<x0)x0=x; if(x>x1)x1=x; }
+    const c = document.createElement("canvas"); c.width = x1-x0+1+2*R; c.height = yEnd-y0+2*R; const x = c.getContext("2d");
+    x.fillStyle = "#000";
+    for (let yy=y0;yy<yEnd;yy++) for (let xx=x0;xx<=x1;xx++) if (f.data[(yy*f.cw+xx)*4+3]>20){ x.beginPath(); x.arc(xx-x0+R+.5, yy-y0+R+.5, R, 0, 7); x.fill(); }
+    return { url: c.toDataURL(), w:c.width/dpr, h:c.height/dpr, left:(x0-R)/dpr-OX, top:(y0-R)/dpr-BY, cx:((x0+x1)/2)/dpr-OX, cy:((y0+yEnd)/2)/dpr-BY };
+  };
   /* cut a mark: pixels of `full` lying above the top of `base` (or the whole glyph for "dot") */
   const cutMark = (full, base, color) => {
     const f = ink(full); if (!f) return null;
@@ -802,12 +816,11 @@ async function fixScripts(){
     x.putImageData(img,0,0); x.globalCompositeOperation="source-in"; x.fillStyle=color; x.fillRect(0,0,c.width,c.height);
     return { canvas:c, w:c.width/dpr, h:c.height/dpr, cx:((x0+x1)/2)/dpr-OX, bottom:y1/dpr-BY, top:y0/dpr-BY };
   };
-  const useDotless = hasGlyph("ı");
   for (const h of heads) {
     const text = h.dataset.scr, color = getComputedStyle(h).color; h.dataset.done = "1";
-    if (![...text].some(ch => ACC[ch] && (ch!=="i" || useDotless))) continue;
+    if (![...text].some(ch => ACC[ch])) continue;
     const span = h.querySelector("span");
-    const conv = ch => { const a = ACC[ch]; if (!a || (ch==="i" && !useDotless)) return esc(ch);
+    const conv = ch => { const a = ACC[ch]; if (!a) return esc(ch);
       return `<span class="acc" data-k="${a[1]}" data-b="${a[0]}" data-o="${ch}">${a[0]}<span class="bl"></span></span>`; };
     /* each word in a nowrap span so the measuring markers can't split it */
     span.innerHTML = text.split(" ").map(w => `<span class="w">${[...w].map(conv).join("")}</span>`).join(" ");
@@ -819,11 +832,14 @@ async function fixScripts(){
     for (const s of span.querySelectorAll(".acc")) {
       const kind = s.dataset.k, b = ink(s.dataset.b), m = mark(kind); if (!b || !m) continue;
       let cx, bottom;
-      if (kind === "dot") {                       /* round dot where the font puts its own i-dot */
-        const di = cutMark("i", ink("ı"), color);
-        cx = b.topCx + (di ? di.cx - ink("ı").topCx : 0);
-        const cy = di ? (di.top + di.bottom)/2 : b.top - FS*0.22;
-        bottom = cy + m.h/2;
+      if (kind === "dot") {                       /* cover the font's tick with background, put a round dot in its place */
+        const tp = topPart("i"); if (!tp) continue;
+        const sr0 = s.getBoundingClientRect(), base0 = s.querySelector(".bl").getBoundingClientRect().top - sr0.top;
+        const er = document.createElement("span"); er.className = "mk er";
+        Object.assign(er.style, { left: tp.left+"px", top: (base0 + tp.top)+"px", width: tp.w+"px", height: tp.h+"px",
+          webkitMaskImage: `url(${tp.url})`, maskImage: `url(${tp.url})` });
+        s.appendChild(er);
+        cx = tp.cx; bottom = tp.cy + m.h/2;
       } else {                                    /* same offset/gap as the háček over š or ring over å */
         const r = ref[kind](); cx = b.topCx + (m.cx - r.base.topCx); bottom = b.top - (r.base.top - m.bottom);
       }
@@ -835,6 +851,9 @@ async function fixScripts(){
     }
   }
 }
+
+/* web fonts may arrive after the first pass (slow mobile data) – try again then */
+if (document.fonts) document.fonts.addEventListener("loadingdone", () => fixScripts());
 
 /* search */
 const search = $("#search"), q = $("#q"), sres = $("#sres");
