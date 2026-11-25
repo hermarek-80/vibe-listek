@@ -54,7 +54,7 @@ button{font:inherit;color:inherit}
 .cover{text-align:center;padding:34px 0 18px}
 .cover .quote{font:500 12.5px/1.5 var(--body);letter-spacing:.06em;text-transform:uppercase;margin:0 0 22px}
 .cover .pre{font:300 40px/1 var(--display);letter-spacing:.03em;margin:0}
-.cover img{width:min(220px,62%);margin:4px auto 0}
+.cover img{max-width:100%;margin:6px auto 0}
 section.sec{padding:30px 0 8px;border-top:0}
 section.sec + section.sec{margin-top:6px}
 
@@ -83,8 +83,7 @@ section.sec + section.sec{margin-top:6px}
 .c-red{color:var(--red)} .c-orange{color:var(--orange)}
 .orn{display:inline-block;width:9px;height:9px;border:1.5px solid currentColor;border-radius:50%;vertical-align:middle;margin:0 14px;position:relative;top:-3px}
 .orn::after{content:"";position:absolute;inset:2px;background:currentColor;border-radius:50%}
-.hd .script{width:auto;height:58px;margin:0 auto}
-.hd.big .script{height:110px}
+.hd .script{max-width:100%;margin:2px auto}
 .hd .sub{display:block;margin-top:8px;font:500 12px/1.3 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
 .hd .sub2{display:block;margin-top:10px;font-size:14px;line-height:1.45}
 .hd .sub2 b{display:block;font-weight:500;letter-spacing:.04em}
@@ -129,7 +128,7 @@ section.sec + section.sec{margin-top:6px}
 .box > .bt{position:absolute;left:50%;top:0;transform:translate(-50%,-55%);background:var(--bg);padding:0 12px;white-space:nowrap;transition:background-color .35s}
 .box > .bt.txt{font:500 17px/1.25 var(--body);letter-spacing:.2em;text-transform:uppercase;padding-left:calc(12px + .2em)}
 .box > .bt.deco{font:300 22px/1.15 var(--display);letter-spacing:.03em;white-space:normal;width:max-content;max-width:80%}
-.box > .bt img{height:62px;width:auto}
+.box > .bt img{max-width:70vw}
 .box > .bt img.ico{height:44px}
 .box.hasimg{padding-top:44px}
 .box .tip{right:-10px;top:30%}
@@ -265,6 +264,11 @@ function tipSvg(color){
   let pts=[];for(let i=0;i<28;i++){const r=i%2?19:23,a=i/28*Math.PI*2;pts.push((24+r*Math.cos(a)).toFixed(1)+","+(24+r*Math.sin(a)).toFixed(1))}
   return `<svg class="tip" viewBox="0 0 48 48" aria-label="Tip"><polygon points="${pts.join(" ")}" fill="var(--${color||"red"})"/><text x="24" y="28.5" text-anchor="middle">TIP</text></svg>`;
 }
+/* script headings cut from print: show every one at the same print scale as “bílá vína”
+   (176 print px → 58 css px), so the handwriting is the same size everywhere */
+const PRINT_W = {listek:541, neco_navic:361, vino_bubliny:560, mixbar:579, koktejly:607, tapas:544, pinsa:416, olivy:468, bila:579, cervena:499, cava:346, family:505};
+const SCRIPT_SCALE = 58/176;
+const sw = name => PRINT_W[name] ? ` style="width:${Math.round(PRINT_W[name]*SCRIPT_SCALE)}px;height:auto"` : "";
 function ribbon(b){ return `<span class="ribbon ${b.ribbon||""}">${esc(b.price)}</span>`; }
 
 const R = {
@@ -272,12 +276,12 @@ const R = {
     const cls = ["hd", b.small?"small":"", b.big?"big":""].join(" ");
     const col = b.color ? ` c-${b.color}` : "";
     let h = "";
-    if (b.img) h += `<h2><img class="script" src="${IMG[b.img]}" alt="${esc(b.alt)}"></h2>`;
+    if (b.img) h += `<h2><img class="script" src="${IMG[b.img]}" alt="${esc(b.alt)}"${sw(b.img)}></h2>`;
     if (b.script) h += `<h2 class="scr${col}" aria-label="${esc(b.script)}" data-scr="${esc(b.script)}"><span aria-hidden="true">${esc(b.script)}</span></h2>`;
     if (b.deco) h += `<h2 class="deco${col}${b.dots||b.small?"":" rules"}">${b.dots?'<span class="orn"></span>':''}${esc(b.deco)}${b.dots?'<span class="orn"></span>':''}</h2>`;
     if (b.serif) h += `<h2 class="serif${col}">${esc(b.serif)}</h2>`;
     if (b.spaced) h += `<h2 class="spaced${col}">${esc(b.spaced)}</h2>`;
-    if (b.img2) h += `<img class="script" style="height:46px;margin:2px auto" src="${IMG[b.img2]}" alt="cava">`;
+    if (b.img2) h += `<img class="script" src="${IMG[b.img2]}" alt="cava"${sw(b.img2)}>`;
     if (b.spaced2) h += `<h2 class="spaced">${esc(b.spaced2)}</h2>`;
     if (b.dotline) h += `<div class="dotline"></div>`;
     if (b.sub) h += `<span class="sub">${esc(b.sub)}</span>`;
@@ -306,7 +310,7 @@ const R = {
   },
   box(b){
     let t = "";
-    if (b.img) t = `<div class="bt"><img class="${b.img==="grapes"?"ico":""}" src="${IMG[b.img]}" alt="${esc(b.alt)}"></div>`;
+    if (b.img) t = `<div class="bt"><img class="${b.img==="grapes"?"ico":""}" src="${IMG[b.img]}" alt="${esc(b.alt)}"${sw(b.img)}></div>`;
     else if (b.title) t = `<div class="bt ${b.deco?"deco":"txt"}${b.titleColor?" c-"+b.titleColor:""}">${esc(b.title)}</div>`;
     let inner = b.blocks.map(x => R[x.k](x)).join("");
     let after = "";
@@ -341,7 +345,7 @@ const main = $("#main"), tabsEl = $("#tabs"), chipsEl = $("#chips");
 const THEME = {pink:"#FBE4E3",mint:"#D9F2EE",peach:"#FDE9CF",cream:"#FCF6D2"};
 TABS.forEach(t => {
   tabsEl.insertAdjacentHTML("beforeend", `<button class="tab" role="tab" id="tab-${t.id}" aria-controls="p-${t.id}" data-tab="${t.id}">${esc(t.label)}</button>`);
-  let h = `<div class="cover">${t.cover.quote?`<p class="quote">${esc(t.cover.quote)}</p>`:""}<h1 class="pre">${esc(t.cover.pre)}</h1><img src="${IMG[t.cover.img]}" alt=""></div>`;
+  let h = `<div class="cover">${t.cover.quote?`<p class="quote">${esc(t.cover.quote)}</p>`:""}<h1 class="pre">${esc(t.cover.pre)}</h1><img src="${IMG[t.cover.img]}" alt=""${sw(t.cover.img)}></div>`;
   const photo = s => s.photo && PHOTOS[s.photo] ? `<figure class="photo"><img src="photos/${s.photo}.webp" width="${PHOTOS[s.photo][0]}" height="${PHOTOS[s.photo][1]}" loading="lazy" decoding="async" alt="${esc(s.photoAlt||s.nav)}"></figure>` : "";
   h += t.sections.map(s => `<section class="sec" id="${t.id}-${s.id}" data-nav="${esc(s.nav)}">${s.blocks.map(b => R[b.k](b)).join("")}${photo(s)}</section>`).join("");
   main.insertAdjacentHTML("beforeend", `<div class="panel" role="tabpanel" id="p-${t.id}" aria-labelledby="tab-${t.id}" hidden>${h}</div>`);
