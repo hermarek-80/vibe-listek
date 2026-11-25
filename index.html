@@ -53,7 +53,7 @@ button{font:inherit;color:inherit}
 .panel[hidden]{display:none}
 .cover{text-align:center;padding:34px 0 18px}
 .cover .quote{font:500 12.5px/1.5 var(--body);letter-spacing:.06em;text-transform:uppercase;margin:0 0 22px}
-.cover .pre{font:400 40px/1 var(--display);letter-spacing:.03em;margin:0}
+.cover .pre{font:300 40px/1 var(--display);letter-spacing:.03em;margin:0}
 .cover img{width:min(220px,62%);margin:4px auto 0}
 section.sec{padding:30px 0 8px;border-top:0}
 section.sec + section.sec{margin-top:6px}
@@ -61,13 +61,14 @@ section.sec + section.sec{margin-top:6px}
 /* headings */
 .hd{text-align:center;margin:8px 0 18px;position:relative}
 .hd h2,.hd h3{margin:0;font-weight:400;text-wrap:balance}
-.deco{font:400 30px/1.12 var(--display);letter-spacing:.03em}
+.deco{font:300 30px/1.12 var(--display);letter-spacing:.03em}
 .hd.small .deco{font-size:22px}
 /* print-style double rules either side of a heading: ═ ROZLÉVANÁ VÍNA ═ */
 .deco.rules::before,.deco.rules::after{content:"";display:inline-block;width:.75em;height:.2em;border-top:2px solid currentColor;border-bottom:2px solid currentColor;vertical-align:.3em;margin:0 .22em}
 /* Neonoir script headings – sized to match the script headings cut from the print files */
 .scr{display:inline-block;position:relative;font:200 52px/1 var(--script);color:var(--red);padding:0 12px 14px;margin:0 auto}
 .hd .scr{font-weight:200}
+.hd .deco,.cover .pre{font-weight:300}
 .scr .w{white-space:nowrap}
 .scr .acc{position:relative}
 .scr .mk{position:absolute;pointer-events:none}
@@ -127,7 +128,7 @@ section.sec + section.sec{margin-top:6px}
 .box{position:relative;margin:34px 0 34px;padding:30px 18px 26px;border:2px dotted color-mix(in srgb,var(--red) 70%,transparent);border-radius:22px;text-align:center}
 .box > .bt{position:absolute;left:50%;top:0;transform:translate(-50%,-55%);background:var(--bg);padding:0 12px;white-space:nowrap;transition:background-color .35s}
 .box > .bt.txt{font:500 17px/1.25 var(--body);letter-spacing:.2em;text-transform:uppercase;padding-left:calc(12px + .2em)}
-.box > .bt.deco{font:400 22px/1.15 var(--display);letter-spacing:.03em;white-space:normal;width:max-content;max-width:80%}
+.box > .bt.deco{font:300 22px/1.15 var(--display);letter-spacing:.03em;white-space:normal;width:max-content;max-width:80%}
 .box > .bt img{height:62px;width:auto}
 .box > .bt img.ico{height:44px}
 .box.hasimg{padding-top:44px}
@@ -155,7 +156,7 @@ section.sec + section.sec{margin-top:6px}
 
 .intro{text-align:center;margin:8px 0 28px;padding:22px 0 6px}
 .intro .rule{height:4px;background:radial-gradient(circle,var(--red) .9px,transparent 1.3px) 0 0/5px 4px repeat-x;opacity:.7}
-.intro h2{margin:16px 0 16px;font:400 30px/1.12 var(--display);letter-spacing:.03em;color:var(--red)}
+.intro h2{margin:16px 0 16px;font:300 30px/1.12 var(--display);letter-spacing:.03em;color:var(--red)}
 .intro.plain h2{font:500 16px/1.35 var(--body);letter-spacing:.04em;color:var(--ink)}
 .intro img{height:62px;margin:4px auto 14px}
 .intro p{margin:0 0 6px;font-size:15.5px}
