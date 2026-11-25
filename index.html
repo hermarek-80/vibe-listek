@@ -210,8 +210,12 @@ section.sec + section.sec{margin-top:6px}
 .thanks p{margin:0;font-size:15px}
 
 /* category photos: width/height attributes reserve the box, so lazy loading never shifts the scroll positions */
-.photo{margin:6px 0 30px}
-.photo img{width:100%;height:auto;background:var(--bg-deep)}
+/* framed like a picture on the wall: thin dark frame, light mat, dotted red line as in the menu's boxes */
+.photo{position:relative;width:min(92%,440px);margin:14px auto 38px;padding:13px;
+  background:color-mix(in srgb,var(--bg) 40%,#fff);border:1.5px solid var(--ink);
+  box-shadow:0 14px 28px -18px rgba(70,35,10,.45)}
+.photo::before{content:"";position:absolute;inset:5px;border:1.5px dotted color-mix(in srgb,var(--red) 70%,transparent);pointer-events:none}
+.photo img{display:block;width:100%;height:auto;background:var(--bg-deep);outline:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 .totop{display:block;margin:0 auto;border:0;background:none;padding:6px 16px;cursor:pointer;border-radius:12px}
 .totop:hover .hand{transform:translateY(-4px)}
 footer .hand{transition:transform .2s ease}
